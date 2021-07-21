@@ -28,6 +28,7 @@ enum HealthDataType {
   SLEEP_IN_BED,
   SLEEP_ASLEEP,
   SLEEP_AWAKE,
+  DISTANCE_CYCLING,
 
 // Heart Rate events (specific to Apple Watch)
   HIGH_HEART_RATE_EVENT,
@@ -66,6 +67,7 @@ const List<HealthDataType> _dataTypeKeysIOS = [
   HealthDataType.SLEEP_AWAKE,
   HealthDataType.SLEEP_ASLEEP,
   HealthDataType.WATER,
+  HealthDataType.DISTANCE_CYCLING,
 ];
 
 /// List of data types available on Android
@@ -110,6 +112,7 @@ const Map<HealthDataType, HealthDataUnit> _dataTypeToUnit = {
   HealthDataType.FLIGHTS_CLIMBED: HealthDataUnit.COUNT,
   HealthDataType.MOVE_MINUTES: HealthDataUnit.MINUTES,
   HealthDataType.DISTANCE_DELTA: HealthDataUnit.METERS,
+  HealthDataType.DISTANCE_CYCLING: HealthDataUnit.METERS,
 
   HealthDataType.WATER: HealthDataUnit.LITER,
   HealthDataType.SLEEP_IN_BED: HealthDataUnit.MINUTES,
