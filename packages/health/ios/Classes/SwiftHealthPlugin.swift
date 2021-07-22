@@ -41,6 +41,37 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let SLEEP_ASLEEP = "SLEEP_ASLEEP"
     let SLEEP_AWAKE = "SLEEP_AWAKE"
     let DISTANCE_CYCLING = "DISTANCE_CYCLING"
+    let PUSH_COUNT = "PUSH_COUNT"
+    let DISTANCE_WHEELCHAIR = "DISTANCE_WHEELCHAIR"
+    let SWIMMING_STROKE_COUNT = "SWIMMING_STROKE_COUNT"
+    let DISTANCE_SWIMMING = "DISTANCE_SWIMMING"
+    let DISTANCE_DOWNGHILL_SNOW_SPORTS = "DISTANCE_DOWNGHILL_SNOW_SPORTS"
+    let NIKE_FUEL = "NIKE_FUEL"
+    let APPLE_EXERCISE_TIME = "APPLE_EXERCISE_TIME"
+    let APPLE_STAND_HOUR = "APPLE_STAND_HOUR"
+    let APPLE_STAND_TIME = "APPLE_STAND_TIME"
+    let LOW_CARDIO_FITNESS_EVENT = "LOW_CARDIO_FITNESS_EVENT"
+    let BODY_MASS = "BODY_MASS"
+    let LEAN_BODY_MASS = "LEAN_BODY_MASS"
+    let BASAL_BODY_TEMPERATURE = "BASAL_BODY_TEMPERATURE"
+    let CERVICAL_MUCUS_QUALITY = "CERVICAL_MUCUS_QUALITY"
+    let SEXUAL_ACTIVITY = "SEXUAL_ACTIVITY"
+    let ENVIRONMENTAL_AUDIO_EXPOSURE = "ENVIRONMENTAL_AUDIO_EXPOSURE"
+    let HEADPHONE_AUDIO_EXPOSURE = "HEADPHONE_AUDIO_EXPOSURE"
+    let RESPIRATORY_RATE = "RESPIRATORY_RATE"
+    let BLOOD_ALCOHOL_CONTENT = "BLOOD_ALCOHOL_CONTENT"
+    let NUMBER_OF_ALCOHOLIC_BEVERAGES = "NUMBER_OF_ALCOHOLIC_BEVERAGES"
+    let APPLE_WALKING_STEADINESS = "APPLE_WALKING_STEADINESS"
+    let APPLE_WALKING_STEADINESS_EVENT = "APPLE_WALKING_STEADINESS_EVENT"
+    let SIX_MINUTE_WALK_TEST_DISTANCE = "SIX_MINUTE_WALK_TEST_DISTANCE"
+    let WALKING_SPEED = "WALKING_SPEED"
+    let WALKING_STEP_LENGTH = "WALKING_STEP_LENGTH"
+    let WALKING_ASYMMETRY_PERCENTAGE = "WALKING_ASYMMETRY_PERCENTAGE"
+    let WALKING_DOUBLE_SUPPORT_PERCENTAGE = "WALKING_DOUBLE_SUPPORT_PERCENTAGE"
+    let STAIR_ASCENT_SPEED = "STAIR_ASCENT_SPEED"
+    let STAIR_DESCENT_SPEED = "STAIR_DESCENT_SPEED"
+    let HANDWASHING_EVENT = "HANDWASHING_EVENT"
+    let UV_EXPOSURE = "UV_EXPOSURE"
 
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -188,6 +219,42 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[SLEEP_ASLEEP] = HKUnit.init(from: "")
         unitDict[SLEEP_AWAKE] = HKUnit.init(from: "")
         unitDict[DISTANCE_CYCLING] = HKUnit.meter()
+        unitDict[PUSH_COUNT] = HKUnit.count()
+        unitDict[DISTANCE_WHEELCHAIR] = HKUnit.meter()
+        unitDict[SWIMMING_STROKE_COUNT] = HKUnit.count()
+        unitDict[DISTANCE_SWIMMING] = HKUnit.meter()
+        unitDict[DISTANCE_DOWNGHILL_SNOW_SPORTS] = HKUnit.meter()
+        unitDict[NIKE_FUEL] = HKUnit.count()
+        unitDict[APPLE_EXERCISE_TIME] = HKUnit.init(from: "")
+        unitDict[APPLE_STAND_HOUR] = HKUnit.init(from: "")
+        unitDict[APPLE_STAND_TIME] = HKUnit.init(from: "")
+        unitDict[LOW_CARDIO_FITNESS_EVENT] = HKUnit.init(from: "")
+        unitDict[VO2_MAX] = HKUnit.init(from: "")
+        unitDict[BODY_MASS] = HKUnit.gramUnit(with: .kilo)
+        unitDict[LEAN_BODY_MASS] = HKUnit.gramUnit(with: .kilo)
+        unitDict[BASAL_BODY_TEMPERATURE] = HKUnit.degreeCelsius()
+        unitDict[CERVICAL_MUCUS_QUALITY] =HKUnit.init(from: "")
+        unitDict[SEXUAL_ACTIVITY] =HKUnit.init(from: "")
+        unitDict[ENVIRONMENTAL_AUDIO_EXPOSURE] =HKUnit.init(from: "")
+        unitDict[SEXUAL_ACTIVITY] =HKUnit.init(from: "")
+        unitDict[ENVIRONMENTAL_AUDIO_EXPOSURE] =HKUnit.pascal()
+        unitDict[HEADPHONE_AUDIO_EXPOSURE] =HKUnit.pascal()
+        unitDict[RESPIRATORY_RATE] =HKUnit.init(from: "count/min")
+        unitDict[BLOOD_ALCOHOL_CONTENT] =HKUnit.percent()
+        unitDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] =HKUnit.percent()
+        unitDict[BLOOD_ALCOHOL_CONTENT] =HKUnit.percent()
+        unitDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] =HKUnit.count()
+        unitDict[APPLE_WALKING_STEADINESS] =HKUnit.percent()
+        unitDict[APPLE_WALKING_STEADINESS_EVENT] =HKUnit.init(from: "")
+        unitDict[SIX_MINUTE_WALK_TEST_DISTANCE] =HKUnit.meter()
+        unitDict[WALKING_SPEED] =HKUnit.init(from: "")
+        unitDict[WALKING_STEP_LENGTH] =HKUnit.meter()
+        unitDict[WALKING_ASYMMETRY_PERCENTAGE] =HKUnit.percent()
+        unitDict[WALKING_DOUBLE_SUPPORT_PERCENTAGE] =HKUnit.percent()
+        unitDict[STAIR_ASCENT_SPEED] =HKUnit.init(from: "")
+        unitDict[STAIR_DESCENT_SPEED] =HKUnit.init(from: "")
+        unitDict[HANDWASHING_EVENT] =HKUnit.init(from: "")
+        unitDict[UV_EXPOSURE] =HKUnit.count()
 
         // Set up iOS 11 specific types (ordinary health data types)
         if #available(iOS 11.0, *) { 
@@ -217,6 +284,29 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[SLEEP_ASLEEP] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
             dataTypesDict[SLEEP_AWAKE] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
             dataTypesDict[DISTANCE_CYCLING] = HKSampleType.quantityType(forIdentifier: .distanceCycling)!
+            dataTypesDict[PUSH_COUNT] = HKSampleType.quantityType(forIdentifier: .pushCount)!
+            dataTypesDict[DISTANCE_WHEELCHAIR] = HKSampleType.quantityType(forIdentifier: .distanceWheelchair)!
+            dataTypesDict[SWIMMING_STROKE_COUNT] = HKSampleType.quantityType(forIdentifier: .swimmingStrokeCount)!
+            dataTypesDict[DISTANCE_SWIMMING] = HKSampleType.quantityType(forIdentifier: .distanceSwimming)!
+            dataTypesDict[DISTANCE_DOWNGHILL_SNOW_SPORTS] = HKSampleType.quantityType(forIdentifier: .distanceDownhillSnowSports)!
+            dataTypesDict[NIKE_FUEL] = HKSampleType.quantityType(forIdentifier: .nikeFuel)!
+            dataTypesDict[APPLE_EXERCISE_TIME] = HKSampleType.quantityType(forIdentifier: .appleExerciseTime)!
+            dataTypesDict[APPLE_STAND_HOUR] = HKSampleType.quantityType(forIdentifier: .appleStandHour)!
+            // dataTypesDict[APPLE_STAND_TIME] = HKSampleType.quantityType(forIdentifier: .appleStandTime)!
+            dataTypesDict[VO2_MAX] = HKSampleType.quantityType(forIdentifier: .vo2Max)!
+            // dataTypesDict[LOW_CARDIO_FITNESS_EVENT] = HKSampleType.quantityType(forIdentifier: .lowCardioFitnessEvent)!
+            dataTypesDict[BODY_MASS] = HKSampleType.quantityType(forIdentifier: .bodyMass)!
+            dataTypesDict[LEAN_BODY_MASS] = HKSampleType.quantityType(forIdentifier: .leanBodyMass)!
+            dataTypesDict[BASAL_BODY_TEMPERATURE] = HKSampleType.quantityType(forIdentifier: .basalBodyTemperature)!
+            dataTypesDict[CERVICAL_MUCUS_QUALITY] = HKSampleType.quantityType(forIdentifier: .cervicalMucusQuality)!
+            dataTypesDict[SEXUAL_ACTIVITY] = HKSampleType.quantityType(forIdentifier: .sexualActivity)!
+            // dataTypesDict[ENVIRONMENTAL_AUDIO_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .environmentalAudioExposure)!
+            // dataTypesDict[HEADPHONE_AUDIO_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .headphoneAudioExposure)!
+            dataTypesDict[RESPIRATORY_RATE] = HKSampleType.quantityType(forIdentifier: .respiratoryRate)!
+            dataTypesDict[BLOOD_ALCOHOL_CONTENT] = HKSampleType.quantityType(forIdentifier: .bloodAlcoholContent)!
+            // dataTypesDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKSampleType.quantityType(forIdentifier: .numberOfAlcoholicBeverages)!
+            // dataTypesDict[APPLE_WALKING_STEADINESS] = HKSampleType.quantityType(forIdentifier: .appleWalkingSteadiness)!
+            dataTypesDict[UV_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .uvExposure)!
 
             healthDataTypes = Array(dataTypesDict.values)
         }
