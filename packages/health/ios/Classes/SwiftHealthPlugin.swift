@@ -292,21 +292,31 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[NIKE_FUEL] = HKSampleType.quantityType(forIdentifier: .nikeFuel)!
             dataTypesDict[APPLE_EXERCISE_TIME] = HKSampleType.quantityType(forIdentifier: .appleExerciseTime)!
             dataTypesDict[APPLE_STAND_HOUR] = HKSampleType.quantityType(forIdentifier: .appleStandHour)!
-            // dataTypesDict[APPLE_STAND_TIME] = HKSampleType.quantityType(forIdentifier: .appleStandTime)!
+            dataTypesDict[APPLE_STAND_TIME] = HKSampleType.quantityType(forIdentifier: .appleStandTime)!
             dataTypesDict[VO2_MAX] = HKSampleType.quantityType(forIdentifier: .vo2Max)!
-            // dataTypesDict[LOW_CARDIO_FITNESS_EVENT] = HKSampleType.quantityType(forIdentifier: .lowCardioFitnessEvent)!
+            dataTypesDict[LOW_CARDIO_FITNESS_EVENT] = HKSampleType.quantityType(forIdentifier: .lowCardioFitnessEvent)!
             dataTypesDict[BODY_MASS] = HKSampleType.quantityType(forIdentifier: .bodyMass)!
             dataTypesDict[LEAN_BODY_MASS] = HKSampleType.quantityType(forIdentifier: .leanBodyMass)!
             dataTypesDict[BASAL_BODY_TEMPERATURE] = HKSampleType.quantityType(forIdentifier: .basalBodyTemperature)!
             dataTypesDict[CERVICAL_MUCUS_QUALITY] = HKSampleType.quantityType(forIdentifier: .cervicalMucusQuality)!
             dataTypesDict[SEXUAL_ACTIVITY] = HKSampleType.quantityType(forIdentifier: .sexualActivity)!
-            // dataTypesDict[ENVIRONMENTAL_AUDIO_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .environmentalAudioExposure)!
-            // dataTypesDict[HEADPHONE_AUDIO_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .headphoneAudioExposure)!
+            dataTypesDict[ENVIRONMENTAL_AUDIO_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .environmentalAudioExposure)!
+            dataTypesDict[HEADPHONE_AUDIO_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .headphoneAudioExposure)!
             dataTypesDict[RESPIRATORY_RATE] = HKSampleType.quantityType(forIdentifier: .respiratoryRate)!
             dataTypesDict[BLOOD_ALCOHOL_CONTENT] = HKSampleType.quantityType(forIdentifier: .bloodAlcoholContent)!
-            // dataTypesDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKSampleType.quantityType(forIdentifier: .numberOfAlcoholicBeverages)!
-            // dataTypesDict[APPLE_WALKING_STEADINESS] = HKSampleType.quantityType(forIdentifier: .appleWalkingSteadiness)!
+            dataTypesDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKSampleType.quantityType(forIdentifier: .numberOfAlcoholicBeverages)!
+            dataTypesDict[APPLE_WALKING_STEADINESS] = HKSampleType.quantityType(forIdentifier: .appleWalkingSteadiness)!
             dataTypesDict[UV_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .uvExposure)!
+            dataTypesDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKSampleType.quantityType(forIdentifier: .numberOfAlcoholicBeverages)!
+            dataTypesDict[APPLE_WALKING_STEADINESS_EVENT] = HKSampleType.quantityType(forIdentifier: .appleWalkingSteadinessEvent)!
+            dataTypesDict[SIX_MINUTE_WALK_TEST_DISTANCE] = HKSampleType.quantityType(forIdentifier: .sixMinuteWalkTestDistance)!
+            dataTypesDict[WALKING_SPEED] = HKSampleType.quantityType(forIdentifier: .walkingSpeed)!
+            dataTypesDict[WALKING_STEP_LENGTH] = HKSampleType.quantityType(forIdentifier: .walkingStepLength)!
+            dataTypesDict[WALKING_ASYMMETRY_PERCENTAGE] = HKSampleType.quantityType(forIdentifier: .walkingAsymmetryPercentage)!
+            dataTypesDict[WALKING_DOUBLE_SUPPORT_PERCENTAGE] = HKSampleType.quantityType(forIdentifier: .walkingDoubleSupportPercentage)!
+            dataTypesDict[STAIR_ASCENT_SPEED] = HKSampleType.quantityType(forIdentifier: .stairAscentSpeed)!
+            dataTypesDict[STAIR_DESCENT_SPEED] = HKSampleType.quantityType(forIdentifier: .stairDescentSpeed)!
+            dataTypesDict[HANDWASHING_EVENT] = HKSampleType.quantityType(forIdentifier: .handwashingEvent)!
 
             healthDataTypes = Array(dataTypesDict.values)
         }
