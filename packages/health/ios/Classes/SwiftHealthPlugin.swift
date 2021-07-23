@@ -147,7 +147,6 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                     result(FlutterError(code: "FlutterHealth", message: "Results are null", details: "\(error)"))
                     return
                 }
-                print(samplesCategory)
                 result(samplesCategory.map { sample -> NSDictionary in
                     let unit = self.unitLookUp(key: dataTypeKey)
 
