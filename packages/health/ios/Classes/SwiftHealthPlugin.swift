@@ -163,10 +163,17 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             }
             result(samples.map { sample -> NSDictionary in
                 let unit = self.unitLookUp(key: dataTypeKey)
+                var value = -404.0
+                
+                do {
+                    value = sample.quantity.doubleValue(for: unit)
+                } catch {
+                    print("Could not convert value for unit \(unit)")
+                }
 
                 return [
                     "uuid": "\(sample.uuid)",
-                    "value": sample.quantity.doubleValue(for: unit),
+                    "value": value,
                     "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
                     "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
                     "source_id": sample.sourceRevision.source.bundleIdentifier,
