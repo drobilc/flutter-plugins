@@ -201,7 +201,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[BLOOD_PRESSURE_DIASTOLIC] = HKUnit.millimeterOfMercury()
         unitDict[BLOOD_PRESSURE_SYSTOLIC] = HKUnit.millimeterOfMercury()
         unitDict[BODY_FAT_PERCENTAGE] = HKUnit.percent()
-        unitDict[BODY_MASS_INDEX] = HKUnit.init(from: "")
+        unitDict[BODY_MASS_INDEX] = HKUnit.count()
         unitDict[BODY_TEMPERATURE] = HKUnit.degreeCelsius()
         unitDict[ELECTRODERMAL_ACTIVITY] = HKUnit.siemen()
         unitDict[HEART_RATE] = HKUnit.init(from: "count/min")
@@ -226,9 +226,9 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[DISTANCE_SWIMMING] = HKUnit.meter()
         unitDict[DISTANCE_DOWNGHILL_SNOW_SPORTS] = HKUnit.meter()
         unitDict[NIKE_FUEL] = HKUnit.count()
-        unitDict[APPLE_EXERCISE_TIME] = HKUnit.init(from: "")
+        unitDict[APPLE_EXERCISE_TIME] = HKUnit.minute()
         unitDict[APPLE_STAND_HOUR] = HKUnit.init(from: "")
-        unitDict[APPLE_STAND_TIME] = HKUnit.init(from: "")
+        unitDict[APPLE_STAND_TIME] = HKUnit.minute()
         unitDict[LOW_CARDIO_FITNESS_EVENT] = HKUnit.init(from: "")
         unitDict[VO2_MAX] = HKUnit.init(from: "ml/kg*min")
         unitDict[BODY_MASS] = HKUnit.gramUnit(with: .kilo)
@@ -237,11 +237,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[CERVICAL_MUCUS_QUALITY] = HKUnit.init(from: "")
         unitDict[SEXUAL_ACTIVITY] = HKUnit.init(from: "")
         unitDict[RESPIRATORY_RATE] = HKUnit.init(from: "count/min")
-        unitDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKUnit.percent()
         unitDict[BLOOD_ALCOHOL_CONTENT] = HKUnit.percent()
-        unitDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKUnit.count()
-        unitDict[APPLE_WALKING_STEADINESS] = HKUnit.percent()
-        unitDict[APPLE_WALKING_STEADINESS_EVENT] = HKUnit.init(from: "")
         unitDict[SIX_MINUTE_WALK_TEST_DISTANCE] = HKUnit.meter()
         unitDict[WALKING_SPEED] = HKUnit.init(from: "m/s")
         unitDict[WALKING_STEP_LENGTH] = HKUnit.meter()
@@ -251,6 +247,14 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[STAIR_DESCENT_SPEED] = HKUnit.init(from: "m/s")
         unitDict[HANDWASHING_EVENT] = HKUnit.init(from: "")
         unitDict[UV_EXPOSURE] = HKUnit.count()
+        unitDict[HIGH_HEART_RATE_EVENT] = HKUnit.init(from: "")
+        unitDict[LOW_HEART_RATE_EVENT] = HKUnit.init(from: "")
+        unitDict[IRREGULAR_HEART_RATE_EVENT] = HKUnit.init(from: "")
+
+        // Units for samples that will be added in iOS 15.0
+        // unitDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKUnit.count()
+        // unitDict[APPLE_WALKING_STEADINESS] = HKUnit.percent()
+        // unitDict[APPLE_WALKING_STEADINESS_EVENT] = HKUnit.init(from: "")
 
         if #available(iOS 8.0, *) {
             dataTypesDict[NIKE_FUEL] = HKSampleType.quantityType(forIdentifier: .nikeFuel)!
@@ -335,7 +339,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[WALKING_ASYMMETRY_PERCENTAGE] = HKSampleType.quantityType(forIdentifier: .walkingAsymmetryPercentage)!
             dataTypesDict[WALKING_STEP_LENGTH] = HKSampleType.quantityType(forIdentifier: .walkingStepLength)!
             dataTypesDict[WALKING_SPEED] = HKSampleType.quantityType(forIdentifier: .walkingSpeed)!
-            dataTypesDict[HANDWASHING_EVENT] = HKSampleType.categoryType(forIdentifier: .handwashingEvent)!
+            dataTypesDict[HANDWASHING_EVENT] = HKSampleType.categoryType(forIdentifier: .handwashingEvent)!//here
             dataTypesDict[SIX_MINUTE_WALK_TEST_DISTANCE] = HKSampleType.quantityType(forIdentifier: .sixMinuteWalkTestDistance)!
         }
         if #available(iOS 14.3, *) {
