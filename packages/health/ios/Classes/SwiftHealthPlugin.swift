@@ -230,7 +230,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[APPLE_STAND_HOUR] = HKUnit.init(from: "")
         unitDict[APPLE_STAND_TIME] = HKUnit.init(from: "")
         unitDict[LOW_CARDIO_FITNESS_EVENT] = HKUnit.init(from: "")
-        unitDict[VO2_MAX] = HKUnit.init(from: "")
+        unitDict[VO2_MAX] = HKUnit.init(from: "ml/kg*min")
         unitDict[BODY_MASS] = HKUnit.gramUnit(with: .kilo)
         unitDict[LEAN_BODY_MASS] = HKUnit.gramUnit(with: .kilo)
         unitDict[BASAL_BODY_TEMPERATURE] = HKUnit.degreeCelsius()
