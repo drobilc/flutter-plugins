@@ -236,8 +236,6 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[BASAL_BODY_TEMPERATURE] = HKUnit.degreeCelsius()
         unitDict[CERVICAL_MUCUS_QUALITY] = HKUnit.init(from: "")
         unitDict[SEXUAL_ACTIVITY] = HKUnit.init(from: "")
-        unitDict[ENVIRONMENTAL_AUDIO_EXPOSURE] = HKUnit.decibelAWeightedSoundPressureLevel()
-        unitDict[HEADPHONE_AUDIO_EXPOSURE] = HKUnit.decibelAWeightedSoundPressureLevel()
         unitDict[RESPIRATORY_RATE] = HKUnit.init(from: "count/min")
         unitDict[BLOOD_ALCOHOL_CONTENT] = HKUnit.percent()
         unitDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKUnit.percent()
@@ -326,6 +324,10 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[APPLE_STAND_TIME] = HKSampleType.quantityType(forIdentifier: .appleStandTime)!
             dataTypesDict[HEADPHONE_AUDIO_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .headphoneAudioExposure)!
             dataTypesDict[ENVIRONMENTAL_AUDIO_EXPOSURE] = HKSampleType.quantityType(forIdentifier: .environmentalAudioExposure)!
+
+            // Only add units for audio exposure if iOS version is at least 13.0.
+            unitDict[ENVIRONMENTAL_AUDIO_EXPOSURE] = HKUnit.decibelAWeightedSoundPressureLevel()
+            unitDict[HEADPHONE_AUDIO_EXPOSURE] = HKUnit.decibelAWeightedSoundPressureLevel()
         }
         if #available(iOS 14.0, *) {
             dataTypesDict[STAIR_ASCENT_SPEED] = HKSampleType.quantityType(forIdentifier: .stairAscentSpeed)!
