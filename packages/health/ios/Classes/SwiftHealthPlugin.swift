@@ -72,6 +72,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let STAIR_DESCENT_SPEED = "STAIR_DESCENT_SPEED"
     let HANDWASHING_EVENT = "HANDWASHING_EVENT"
     let UV_EXPOSURE = "UV_EXPOSURE"
+    let VO2_MAX = "VO2_MAX"
 
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -341,12 +342,12 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         if #available(iOS 14.3, *) {
             dataTypesDict[LOW_CARDIO_FITNESS_EVENT] = HKSampleType.categoryType(forIdentifier: .lowCardioFitnessEvent)!
         }
-        if #available(iOS 15.0, *) {
+        // Upcoming data types for iOS 15+
+        /*if #available(iOS 15.0, *) {
             dataTypesDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKSampleType.quantityType(forIdentifier: .numberOfAlcoholicBeverages)!
             dataTypesDict[APPLE_WALKING_STEADINESS] = HKSampleType.quantityType(forIdentifier: .appleWalkingSteadiness)!
-            dataTypesDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKSampleType.quantityType(forIdentifier: .numberOfAlcoholicBeverages)!
             dataTypesDict[APPLE_WALKING_STEADINESS_EVENT] = HKSampleType.categoryType(forIdentifier: .appleWalkingSteadinessEvent)!
-        }
+        }*/
 
         healthDataTypes = Array(dataTypesDict.values)
 
