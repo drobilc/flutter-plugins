@@ -32,6 +32,20 @@ class HealthDataPoint {
     }
   }
 
+  factory HealthDataPoint.create({
+    required num value,
+    required HealthDataType type,
+    required HealthDataUnit unit,
+    required DateTime dateFrom,
+    required DateTime dateTo,
+    required PlatformType platform,
+    required String deviceId,
+    required String sourceId,
+    required String sourceName,
+  }) =>
+      HealthDataPoint._(value, type, unit, dateFrom, dateTo, platform, deviceId,
+          sourceId, sourceName);
+
   double _convertMinutes() {
     int ms = dateTo.millisecondsSinceEpoch - dateFrom.millisecondsSinceEpoch;
     return ms / (1000 * 60);
