@@ -247,6 +247,38 @@ const HealthDataTypeJsonValue = {
   HealthDataType.LOW_HEART_RATE_EVENT: 'low_heart_rate_event',
   HealthDataType.IRREGULAR_HEART_RATE_EVENT: 'irregular_heart_rate_event',
   HealthDataType.ELECTRODERMAL_ACTIVITY: 'electrodermal_activity',
+  HealthDataType.DISTANCE_CYCLING: 'distance_cycling',
+  HealthDataType.PUSH_COUNT: 'push_count',
+  HealthDataType.DISTANCE_WHEELCHAIR: 'distance_wheelchair',
+  HealthDataType.SWIMMING_STROKE_COUNT: 'swimming_stroke_count',
+  HealthDataType.DISTANCE_SWIMMING: 'distance_swimming',
+  HealthDataType.DISTANCE_DOWNGHILL_SNOW_SPORTS:
+      'distance_downghill_snow_sports',
+  HealthDataType.NIKE_FUEL: 'nike_fuel',
+  HealthDataType.APPLE_EXERCISE_TIME: 'apple_exercise_time',
+  HealthDataType.APPLE_STAND_HOUR: 'apple_stand_hour',
+  HealthDataType.APPLE_STAND_TIME: 'apple_stand_time',
+  HealthDataType.LOW_CARDIO_FITNESS_EVENT: 'low_cardio_fitness_event',
+  HealthDataType.BODY_MASS: 'body_mass',
+  HealthDataType.LEAN_BODY_MASS: 'lean_body_mass',
+  HealthDataType.BASAL_BODY_TEMPERATURE: 'basal_body_temperature',
+  HealthDataType.CERVICAL_MUCUS_QUALITY: 'cervical_mucus_quality',
+  HealthDataType.SEXUAL_ACTIVITY: 'sexual_activity',
+  HealthDataType.ENVIRONMENTAL_AUDIO_EXPOSURE: 'environmental_audio_exposure',
+  HealthDataType.HEADPHONE_AUDIO_EXPOSURE: 'headphone_audio_exposure',
+  HealthDataType.RESPIRATORY_RATE: 'respiratory_rate',
+  HealthDataType.BLOOD_ALCOHOL_CONTENT: 'blood_alcohol_content',
+  HealthDataType.SIX_MINUTE_WALK_TEST_DISTANCE: 'six_minute_walk_test_distance',
+  HealthDataType.WALKING_SPEED: 'walking_speed',
+  HealthDataType.WALKING_STEP_LENGTH: 'walking_step_length',
+  HealthDataType.WALKING_ASYMMETRY_PERCENTAGE: 'walking_asymmetry_percentage',
+  HealthDataType.WALKING_DOUBLE_SUPPORT_PERCENTAGE:
+      'walking_double_support_percentage',
+  HealthDataType.STAIR_ASCENT_SPEED: 'stair_ascent_speed',
+  HealthDataType.STAIR_DESCENT_SPEED: 'stair_descent_speed',
+  HealthDataType.HANDWASHING_EVENT: 'handwashing_event',
+  HealthDataType.UV_EXPOSURE: 'uv_exposure',
+  HealthDataType.VO2_MAX: 'vo2_max',
 };
 
 const HealthDataUnitJsonValue = {
@@ -267,7 +299,7 @@ const HealthDataUnitJsonValue = {
   HealthDataUnit.LITER: 'liter',
 };
 
-const PlatformTypeJsonValue = { 
+const PlatformTypeJsonValue = {
   PlatformType.IOS: 'ios',
   PlatformType.ANDROID: 'android'
 };
