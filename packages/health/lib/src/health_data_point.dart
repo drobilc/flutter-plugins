@@ -25,8 +25,7 @@ class HealthDataPoint {
       this._sourceName) {
     // set the value to minutes rather than the category
     // returned by the native API
-    if (type == HealthDataType.MINDFULNESS ||
-        type == HealthDataType.SLEEP_IN_BED ||
+    if (type == HealthDataType.SLEEP_IN_BED ||
         type == HealthDataType.SLEEP_ASLEEP ||
         type == HealthDataType.SLEEP_AWAKE) {
       this._value = _convertMinutes();
