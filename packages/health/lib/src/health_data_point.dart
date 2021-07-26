@@ -44,7 +44,7 @@ class HealthDataPoint {
     required String sourceId,
     required String sourceName,
   }) =>
-      HealthDataPoint._(value, type, unit, dateFrom, dateTo, platform, deviceId,
+      HealthDataPoint(value, type, unit, dateFrom, dateTo, platform, deviceId,
           sourceId, sourceName);
 
   double _convertMinutes() {
