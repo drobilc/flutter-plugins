@@ -110,26 +110,35 @@ class HealthFactory {
     final unit = _dataTypeToUnit[dataType]!;
 
     final fetchedDataPoints = await _channel.invokeMethod('getData', args);
+    print(fetchedDataPoints);
+    List<HealthDataPoint> hdpList = [];
     if (fetchedDataPoints != null) {
-      return fetchedDataPoints.map<HealthDataPoint>((e) {
-        final num value = e['value'];
-        final DateTime from =
-            DateTime.fromMillisecondsSinceEpoch(e['date_from']);
-        final DateTime to = DateTime.fromMillisecondsSinceEpoch(e['date_to']);
-        final String sourceId = e["source_id"];
-        final String sourceName = e["source_name"];
-        return HealthDataPoint(
-          value,
-          dataType,
-          unit,
-          from,
-          to,
-          _platformType,
-          _deviceId!,
-          sourceId,
-          sourceName,
-        );
-      }).toList();
+      for (Map e in fetchedDataPoints) {
+        print("--a$e");
+        final List dtapoint = e['val'];
+        dtapoint.forEach((element) {
+          print(element);
+          final num value = element['value'];
+          final DateTime from =
+              DateTime.fromMillisecondsSinceEpoch(element['date_from']);
+          final DateTime to =
+              DateTime.fromMillisecondsSinceEpoch(element['date_to']);
+          final String sourceId = element["source_id"];
+          final String sourceName = element["source_name"];
+          hdpList.add(HealthDataPoint(
+            value,
+            dataType,
+            unit,
+            from,
+            to,
+            _platformType,
+            _deviceId!,
+            sourceId,
+            sourceName,
+          ));
+        });
+      }
+      return hdpList;
     } else {
       return <HealthDataPoint>[];
     }

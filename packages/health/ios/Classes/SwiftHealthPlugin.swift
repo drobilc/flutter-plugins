@@ -74,6 +74,8 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let UV_EXPOSURE = "UV_EXPOSURE"
     let VO2_MAX = "VO2_MAX"
 
+    let catagoryTypes = ["APPLE_STAND_HOUR","CERVICAL_MUCUS_QUALITY","SEXUAL_ACTIVITY","MINDFULNESS","SLEEP_IN_BED","SLEEP_ASLEEP","SLEEP_AWAKE","HIGH_HEART_RATE_EVENT","LOW_HEART_RATE_EVENT","IRREGULAR_HEART_RATE_EVENT","HANDWASHING_EVENT"]
+
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter_health", binaryMessenger: registrar.messenger())
@@ -125,19 +127,88 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         }
     }
 
-    func getData(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    func testStatisticsCollectionQueryCumulitive(date: Date,result: @escaping FlutterResult,hunit: HKUnit,datatypekey: String ) {
+
+        //let dataType = dataQuantityTypeLookUp(key: datatypekey)
+        
+        guard let stepCount = HKObjectType.quantityType(forIdentifier: .stepCount) else {
+            fatalError("*** Unable to get the body mass type ***")
+        }
+        
+        var interval = DateComponents()
+        interval.hour = 24
+        
+        let calendar = Calendar.current
+        let anchorDate = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: date)
+
+        let query = HKStatisticsCollectionQuery.init(quantityType: stepCount,
+                                                     quantitySamplePredicate: nil,
+                                                     options: [.cumulativeSum, .separateBySource],
+                                                     anchorDate: date,
+                                                     intervalComponents: interval)
+        
+        query.initialResultsHandler = {
+            query, results, error in
+            
+            let startDate = date
+            var dataList = [[String:Any]]()
+            
+            print("dte - \(date)")
+            print("Cumulative Sum")
+            results?.enumerateStatistics(from: startDate,
+                                         to: Date(), with: { (result, stop) in
+                                         dataList.append(
+                                             [
+                                                "value": result.sumQuantity()?.doubleValue(for: HKUnit.count()) ?? 0,
+                                                "date_from": Int(result.startDate.timeIntervalSince1970 * 1000),
+                                                "date_to": Int(result.startDate.timeIntervalSince1970 * 1000),
+                                                "source_id": "_",
+                                                "source_name": "Cumulitive"
+                                             ]
+                                         )
+                                            print("Time: \(result.startDate), \(result.sumQuantity()?.doubleValue(for: HKUnit.count()) ?? 0)")
+            })
+            print("--lst - \(dataList)")
+            result([
+                    "vall":dataList
+                    ])
+            return
+            // print("By Source")
+            // for source in (results?.sources())! {
+            //     print("Next Device: \(source.name)")
+            //     results?.enumerateStatistics(from: startDate,
+            //                                  to: Date(), with: { (result, stop) in
+            //                                     print("\(result.startDate): \(result.sumQuantity(for: source)?.doubleValue(for: hunit) ?? 0)")
+            //     })
+            // }
+        }
+        
+        
+        HKHealthStore().execute(query)
+    }
+
+    func getData(call: FlutterMethodCall, result: @escaping FlutterResult ) {
+        
         let arguments = call.arguments as? NSDictionary
         let dataTypeKey = (arguments?["dataTypeKey"] as? String) ?? "DEFAULT"
         let startDate = (arguments?["startDate"] as? NSNumber) ?? 0
         let endDate = (arguments?["endDate"] as? NSNumber) ?? 0
 
+
+        let startDateModified = startDate.doubleValue
+        let endDateModified = endDate.doubleValue 
+
         // Convert dates from milliseconds to Date()
-        let dateFrom = Date(timeIntervalSince1970: startDate.doubleValue / 1000)
-        let dateTo = Date(timeIntervalSince1970: endDate.doubleValue / 1000)
+        let dateFrom = Date(timeIntervalSince1970: startDateModified / 1000)
+        let dateTo = Date(timeIntervalSince1970: endDateModified / 1000)
+
+        
 
         let dataType = dataTypeLookUp(key: dataTypeKey)
         let predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: .strictStartDate)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
+
+        if(dataTypeKey != self.STEPS){
 
         let query = HKSampleQuery(sampleType: dataType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [sortDescriptor]) {
             x, samplesOrNil, error in
@@ -159,14 +230,14 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 result(samplesCategory.map { sample -> NSDictionary in
                     let unit = self.unitLookUp(key: dataTypeKey)
 
-                    return [
+                    return ["val":[[
                         "uuid": "\(sample.uuid)",
                         "value": sample.value,
                         "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
                         "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
                         "source_id": sample.sourceRevision.source.bundleIdentifier,
                         "source_name": sample.sourceRevision.source.name
-                    ]
+                    ]]]
                 })
                 return
             }
@@ -174,18 +245,82 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 let unit = self.unitLookUp(key: dataTypeKey)
                 let value = sample.quantity.doubleValue(for: unit)
 
-                return [
+                return ["val":[[
                     "uuid": "\(sample.uuid)",
                     "value": value,
                     "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
                     "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
                     "source_id": sample.sourceRevision.source.bundleIdentifier,
                     "source_name": sample.sourceRevision.source.name
-                ]
+                ]]]
             })
             return
         }
         HKHealthStore().execute(query)
+        }
+        else{
+        
+        let date = dateFrom
+
+        guard let stepCount = HKObjectType.quantityType(forIdentifier: .stepCount) else {
+            fatalError("*** Unable to get the body mass type ***")
+        }
+        
+        var interval = DateComponents()
+        interval.hour = 24
+        
+        let calendar = Calendar.current
+        let anchorDate = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: date)
+
+        let query = HKStatisticsCollectionQuery.init(quantityType: stepCount,
+                                                     quantitySamplePredicate: nil,
+                                                     options: [.cumulativeSum, .separateBySource],
+                                                     anchorDate: date,
+                                                     intervalComponents: interval)
+        
+        query.initialResultsHandler = {
+            query, results, error in
+            
+            let startDate = date
+            var dataList = [[String:Any]]()
+            
+            print("dte - \(date)")
+            print("Cumulative Sum")
+            results?.enumerateStatistics(from: startDate,
+                                         to: Date(), with: { (result, stop) in
+                                         dataList.append(
+                                             [
+                                                "value": result.sumQuantity()?.doubleValue(for: HKUnit.count()) ?? 0,
+                                                "date_from": Int(result.startDate.timeIntervalSince1970 * 1000),
+                                                "date_to": Int(result.startDate.timeIntervalSince1970 * 1000),
+                                                "source_id": "_",
+                                                "source_name": "Cumulitive"
+                                             ]
+                                         )
+                                            print("Time: \(result.startDate), \(result.sumQuantity()?.doubleValue(for: HKUnit.count()) ?? 0)")
+            })
+            print("--lst - \(dataList)")
+            var dataDict:NSDictionary = ["vall":dataList]
+            result(dataDict.map { sample -> NSDictionary in
+                print(sample)
+                return [
+                    "val":dataList
+                ]
+            })
+            return
+            // print("By Source")
+            // for source in (results?.sources())! {
+            //     print("Next Device: \(source.name)")
+            //     results?.enumerateStatistics(from: startDate,
+            //                                  to: Date(), with: { (result, stop) in
+            //                                     print("\(result.startDate): \(result.sumQuantity(for: source)?.doubleValue(for: hunit) ?? 0)")
+            //     })
+            // }
+        }
+        
+        
+        HKHealthStore().execute(query)
+        }
     }
 
     func unitLookUp(key: String) -> HKUnit {
@@ -194,6 +329,13 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         }
         return unit
     }
+
+    // func dataQuantityTypeLookUp(key: String) -> HKQuantityType {
+    //     guard let dataType_ = dataTypesDict[key] else {
+    //         return HKSampleType.quantityType(forIdentifier: .bodyMass)!
+    //     }
+    //     return dataType_
+    // }
 
     func dataTypeLookUp(key: String) -> HKSampleType {
         guard let dataType_ = dataTypesDict[key] else {
