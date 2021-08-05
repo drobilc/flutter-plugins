@@ -9,6 +9,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     var heartRateEventTypes = Set<HKSampleType>()
     var allDataTypes = Set<HKSampleType>()
     var dataTypesDict: [String: HKSampleType] = [:]
+    var commumativedataTypesDict: [String: HKQuantityType] = [:]
     var unitDict: [String: HKUnit] = [:]
 
     // Health Data Type Keys
@@ -74,7 +75,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let UV_EXPOSURE = "UV_EXPOSURE"
     let VO2_MAX = "VO2_MAX"
 
-    let catagoryTypes = ["APPLE_STAND_HOUR","CERVICAL_MUCUS_QUALITY","SEXUAL_ACTIVITY","MINDFULNESS","SLEEP_IN_BED","SLEEP_ASLEEP","SLEEP_AWAKE","HIGH_HEART_RATE_EVENT","LOW_HEART_RATE_EVENT","IRREGULAR_HEART_RATE_EVENT","HANDWASHING_EVENT"]
+    let catagoryTypes = ["STEPS","ACTIVE_ENERGY_BURNED","BASAL_ENERGY_BURNED","DISTANCE_WALKING_RUNNING","FLIGHTS_CLIMBED","DISTANCE_CYCLING"]
 
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -187,6 +188,8 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         HKHealthStore().execute(query)
     }
 
+
+
     func getData(call: FlutterMethodCall, result: @escaping FlutterResult ) {
         
         let arguments = call.arguments as? NSDictionary
@@ -208,7 +211,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         let predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: .strictStartDate)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
 
-        if(dataTypeKey != self.STEPS){
+        if(!catagoryTypes.contains(dataTypeKey)){
 
         let query = HKSampleQuery(sampleType: dataType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [sortDescriptor]) {
             x, samplesOrNil, error in
@@ -262,7 +265,9 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         
         let date = dateFrom
 
-        guard let stepCount = HKObjectType.quantityType(forIdentifier: .stepCount) else {
+        let unitType = self.unitLookUp(key: dataTypeKey)
+
+        guard let quantityObj = commumativedataTypesDict[dataTypeKey] else {
             fatalError("*** Unable to get the body mass type ***")
         }
         
@@ -272,7 +277,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         let calendar = Calendar.current
         let anchorDate = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: date)
 
-        let query = HKStatisticsCollectionQuery.init(quantityType: stepCount,
+        let query = HKStatisticsCollectionQuery.init(quantityType: quantityObj,
                                                      quantitySamplePredicate: nil,
                                                      options: [.cumulativeSum, .separateBySource],
                                                      anchorDate: date,
@@ -290,14 +295,14 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                                          to: Date(), with: { (result, stop) in
                                          dataList.append(
                                              [
-                                                "value": result.sumQuantity()?.doubleValue(for: HKUnit.count()) ?? 0,
+                                                "value": result.sumQuantity()?.doubleValue(for: unitType) ?? 0,
                                                 "date_from": Int(result.startDate.timeIntervalSince1970 * 1000),
                                                 "date_to": Int(result.startDate.timeIntervalSince1970 * 1000),
                                                 "source_id": "_",
                                                 "source_name": "Cumulitive"
                                              ]
                                          )
-                                            print("Time: \(result.startDate), \(result.sumQuantity()?.doubleValue(for: HKUnit.count()) ?? 0)")
+                                            print("Time: \(result.startDate), \(result.sumQuantity()?.doubleValue(for: unitType) ?? 0)")
             })
             print("--lst - \(dataList)")
             var dataDict:NSDictionary = ["vall":dataList]
@@ -445,6 +450,14 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[HEART_RATE_VARIABILITY_SDNN] = HKSampleType.quantityType(forIdentifier: .heartRateVariabilitySDNN)!
             dataTypesDict[HEIGHT] = HKSampleType.quantityType(forIdentifier: .height)!
             dataTypesDict[RESTING_HEART_RATE] = HKSampleType.quantityType(forIdentifier: .restingHeartRate)!
+            //=============================================================================================================
+            commumativedataTypesDict[STEPS] = HKObjectType.quantityType(forIdentifier: .stepCount)                                   // cummulative Types
+            commumativedataTypesDict[ACTIVE_ENERGY_BURNED] = HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)
+            commumativedataTypesDict[BASAL_ENERGY_BURNED] = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)
+            commumativedataTypesDict[DISTANCE_WALKING_RUNNING] = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)
+            commumativedataTypesDict[FLIGHTS_CLIMBED] = HKObjectType.quantityType(forIdentifier: .flightsClimbed)
+            commumativedataTypesDict[DISTANCE_CYCLING] = HKObjectType.quantityType(forIdentifier: .distanceCycling)
+            // ==================================================================================================================
             dataTypesDict[STEPS] = HKSampleType.quantityType(forIdentifier: .stepCount)!
             dataTypesDict[WAIST_CIRCUMFERENCE] = HKSampleType.quantityType(forIdentifier: .waistCircumference)!
             dataTypesDict[WALKING_HEART_RATE] = HKSampleType.quantityType(forIdentifier: .walkingHeartRateAverage)!
