@@ -110,14 +110,11 @@ class HealthFactory {
     final unit = _dataTypeToUnit[dataType]!;
 
     final fetchedDataPoints = await _channel.invokeMethod('getData', args);
-    print(fetchedDataPoints);
     List<HealthDataPoint> hdpList = [];
     if (fetchedDataPoints != null) {
       for (Map e in fetchedDataPoints) {
-        print("--a$e");
         final List dtapoint = e['val'];
         dtapoint.forEach((element) {
-          print(element);
           final num value = element['value'];
           final DateTime from =
               DateTime.fromMillisecondsSinceEpoch(element['date_from']);
