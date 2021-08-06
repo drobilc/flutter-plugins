@@ -75,7 +75,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let UV_EXPOSURE = "UV_EXPOSURE"
     let VO2_MAX = "VO2_MAX"
 
-    let catagoryTypes = ["STEPS","ACTIVE_ENERGY_BURNED","BASAL_ENERGY_BURNED","DISTANCE_WALKING_RUNNING","FLIGHTS_CLIMBED","DISTANCE_CYCLING","WALKING_STEP_LENGTH"]
+    let catagoryTypes = ["STEPS","ACTIVE_ENERGY_BURNED","BASAL_ENERGY_BURNED","DISTANCE_WALKING_RUNNING","FLIGHTS_CLIMBED","DISTANCE_CYCLING"]
 
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -298,8 +298,8 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                                            dataList.append(
                                              [
                                                 "value": result.averageQuantity()?.doubleValue(for: unitType) ?? 0,
-                                                "date_from": Int(result.startDate.timeIntervalSince1970 * 1000),
-                                                "date_to": Int(result.startDate.timeIntervalSince1970 * 1000),
+                                                "date_from": Int((result.startDate.timeIntervalSince1970 + 86400) * 1000),
+                                                "date_to": Int((result.startDate.timeIntervalSince1970 + 86400) * 1000),
                                                 "source_id": "_",
                                                 "source_name": "Cumulitive"
                                              ]
@@ -309,8 +309,8 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                                              dataList.append(
                                              [
                                                 "value": result.sumQuantity()?.doubleValue(for: unitType) ?? 0,
-                                                "date_from": Int(result.startDate.timeIntervalSince1970 * 1000),
-                                                "date_to": Int(result.startDate.timeIntervalSince1970 * 1000),
+                                                "date_from": Int((result.startDate.timeIntervalSince1970 + 86400) * 1000),
+                                                "date_to": Int((result.startDate.timeIntervalSince1970 + 86400) * 1000),
                                                 "source_id": "_",
                                                 "source_name": "Cumulitive"
                                              ]

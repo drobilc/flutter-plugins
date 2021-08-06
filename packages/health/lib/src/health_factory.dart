@@ -117,9 +117,9 @@ class HealthFactory {
         dtapoint.forEach((element) {
           final num value = element['value'];
           final DateTime from =
-              DateTime.fromMillisecondsSinceEpoch(element['date_from']);
+              DateTime.fromMillisecondsSinceEpoch(element['date_from']).toUtc();
           final DateTime to =
-              DateTime.fromMillisecondsSinceEpoch(element['date_to']);
+              DateTime.fromMillisecondsSinceEpoch(element['date_to']).toUtc();
           final String sourceId = element["source_id"];
           final String sourceName = element["source_name"];
           hdpList.add(HealthDataPoint(
