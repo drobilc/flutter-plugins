@@ -75,7 +75,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let UV_EXPOSURE = "UV_EXPOSURE"
     let VO2_MAX = "VO2_MAX"
 
-    let catagoryTypes = ["STEPS","ACTIVE_ENERGY_BURNED","BASAL_ENERGY_BURNED","DISTANCE_WALKING_RUNNING","FLIGHTS_CLIMBED","DISTANCE_CYCLING"]
+    let catagoryTypes = ["STEPS","ACTIVE_ENERGY_BURNED","BASAL_ENERGY_BURNED","DISTANCE_WALKING_RUNNING","FLIGHTS_CLIMBED","DISTANCE_CYCLING","WALKING_STEP_LENGTH"]
 
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -279,7 +279,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
 
         let query = HKStatisticsCollectionQuery.init(quantityType: quantityObj,
                                                      quantitySamplePredicate: nil,
-                                                     options: [.cumulativeSum, .separateBySource],
+                                                     options: (dataTypeKey == "HEART_RATE" || dataTypeKey == "RESTING_HEART_RATE" ) ? [.discreteAverage , .discreteMin ,.discreteMax , .separateBySource] : [.cumulativeSum, .separateBySource],
                                                      anchorDate: date,
                                                      intervalComponents: interval)
         
@@ -288,12 +288,25 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             
             let startDate = date
             var dataList = [[String:Any]]()
-            
-            print("dte - \(date)")
+
             print("Cumulative Sum")
             results?.enumerateStatistics(from: startDate,
                                          to: Date(), with: { (result, stop) in
-                                         dataList.append(
+                                         if(dataTypeKey == "HEART_RATE" || dataTypeKey == "RESTING_HEART_RATE"){
+                                          print("hte - \(result)")
+                                          print("hte - \(result.averageQuantity()?.doubleValue(for: unitType))")
+                                           dataList.append(
+                                             [
+                                                "value": result.averageQuantity()?.doubleValue(for: unitType) ?? 0,
+                                                "date_from": Int(result.startDate.timeIntervalSince1970 * 1000),
+                                                "date_to": Int(result.startDate.timeIntervalSince1970 * 1000),
+                                                "source_id": "_",
+                                                "source_name": "Cumulitive"
+                                             ]
+                                         )
+                                          }
+                                         else{
+                                             dataList.append(
                                              [
                                                 "value": result.sumQuantity()?.doubleValue(for: unitType) ?? 0,
                                                 "date_from": Int(result.startDate.timeIntervalSince1970 * 1000),
@@ -302,6 +315,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                                                 "source_name": "Cumulitive"
                                              ]
                                          )
+                                         }
                                             print("Time: \(result.startDate), \(result.sumQuantity()?.doubleValue(for: unitType) ?? 0)")
             })
             print("--lst - \(dataList)")
@@ -407,6 +421,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[LOW_HEART_RATE_EVENT] = HKUnit.init(from: "")
         unitDict[IRREGULAR_HEART_RATE_EVENT] = HKUnit.init(from: "")
 
+
         // Units for samples that will be added in iOS 15.0
         // unitDict[NUMBER_OF_ALCOHOLIC_BEVERAGES] = HKUnit.count()
         // unitDict[APPLE_WALKING_STEADINESS] = HKUnit.percent()
@@ -457,6 +472,8 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             commumativedataTypesDict[DISTANCE_WALKING_RUNNING] = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)
             commumativedataTypesDict[FLIGHTS_CLIMBED] = HKObjectType.quantityType(forIdentifier: .flightsClimbed)
             commumativedataTypesDict[DISTANCE_CYCLING] = HKObjectType.quantityType(forIdentifier: .distanceCycling)
+            commumativedataTypesDict[HEART_RATE] = HKObjectType.quantityType(forIdentifier: .heartRate)
+            commumativedataTypesDict[RESTING_HEART_RATE] = HKObjectType.quantityType(forIdentifier: .restingHeartRate)
             // ==================================================================================================================
             dataTypesDict[STEPS] = HKSampleType.quantityType(forIdentifier: .stepCount)!
             dataTypesDict[WAIST_CIRCUMFERENCE] = HKSampleType.quantityType(forIdentifier: .waistCircumference)!
@@ -505,6 +522,11 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[WALKING_SPEED] = HKSampleType.quantityType(forIdentifier: .walkingSpeed)!
             dataTypesDict[HANDWASHING_EVENT] = HKSampleType.categoryType(forIdentifier: .handwashingEvent)!//here
             dataTypesDict[SIX_MINUTE_WALK_TEST_DISTANCE] = HKSampleType.quantityType(forIdentifier: .sixMinuteWalkTestDistance)!
+
+            //=============================================================================================================
+            commumativedataTypesDict[STEPS] = HKObjectType.quantityType(forIdentifier: .stepCount)                                   // cummulative Types
+            commumativedataTypesDict[WALKING_STEP_LENGTH] = HKObjectType.quantityType(forIdentifier: .walkingStepLength)
+            // ==================================================================================================================
         }
         if #available(iOS 14.3, *) {
             dataTypesDict[LOW_CARDIO_FITNESS_EVENT] = HKSampleType.categoryType(forIdentifier: .lowCardioFitnessEvent)!
