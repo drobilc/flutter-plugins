@@ -154,8 +154,6 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             let startDate = date
             var dataList = [[String:Any]]()
             
-            print("dte - \(date)")
-            print("Cumulative Sum")
             results?.enumerateStatistics(from: startDate,
                                          to: Date(), with: { (result, stop) in
                                          dataList.append(
@@ -167,21 +165,11 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                                                 "source_name": "Cumulitive"
                                              ]
                                          )
-                                            print("Time: \(result.startDate), \(result.sumQuantity()?.doubleValue(for: HKUnit.count()) ?? 0)")
             })
-            print("--lst - \(dataList)")
             result([
                     "vall":dataList
                     ])
             return
-            // print("By Source")
-            // for source in (results?.sources())! {
-            //     print("Next Device: \(source.name)")
-            //     results?.enumerateStatistics(from: startDate,
-            //                                  to: Date(), with: { (result, stop) in
-            //                                     print("\(result.startDate): \(result.sumQuantity(for: source)?.doubleValue(for: hunit) ?? 0)")
-            //     })
-            // }
         }
         
         
@@ -289,12 +277,9 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             let startDate = date
             var dataList = [[String:Any]]()
 
-            print("Cumulative Sum")
             results?.enumerateStatistics(from: startDate,
                                          to: Date(), with: { (result, stop) in
                                          if(dataTypeKey == "HEART_RATE" || dataTypeKey == "RESTING_HEART_RATE"){
-                                          print("hte - \(result)")
-                                          print("hte - \(result.averageQuantity()?.doubleValue(for: unitType))")
                                            dataList.append(
                                              [
                                                 "value": result.averageQuantity()?.doubleValue(for: unitType) ?? 0,
@@ -316,25 +301,14 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                                              ]
                                          )
                                          }
-                                            print("Time: \(result.startDate), \(result.sumQuantity()?.doubleValue(for: unitType) ?? 0)")
             })
-            print("--lst - \(dataList)")
             var dataDict:NSDictionary = ["vall":dataList]
             result(dataDict.map { sample -> NSDictionary in
-                print(sample)
                 return [
                     "val":dataList
                 ]
             })
             return
-            // print("By Source")
-            // for source in (results?.sources())! {
-            //     print("Next Device: \(source.name)")
-            //     results?.enumerateStatistics(from: startDate,
-            //                                  to: Date(), with: { (result, stop) in
-            //                                     print("\(result.startDate): \(result.sumQuantity(for: source)?.doubleValue(for: hunit) ?? 0)")
-            //     })
-            // }
         }
         
         
