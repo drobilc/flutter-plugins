@@ -64,6 +64,23 @@ enum HealthDataType {
   LOW_HEART_RATE_EVENT,
   IRREGULAR_HEART_RATE_EVENT,
   ELECTRODERMAL_ACTIVITY,
+
+// Nutrition health-types
+  DIETARY_ENERGY_CONSUMED,
+  DIETARY_FAT_TOTAL,
+  DIETARY_FAT_SATURATED,
+  DIETARY_CHOLESTEROL,
+  DIETARY_CARBOHYDRATES,
+  DIETARY_FIBER,
+  DIETARY_SUGAR,
+  DIETARY_PROTEIN,
+  DIETARY_CALCIUM,
+  DIETARY_IRON,
+  DIETARY_POTASSIUM,
+  DIETARY_SODIUM,
+  DIETARY_VITAMIN_A,
+  DIETARY_VITAMIN_C,
+  DIETARY_VITAMIN_D,
 }
 
 /// List of data types available on iOS
@@ -126,6 +143,21 @@ const List<HealthDataType> _dataTypeKeysIOS = [
   HealthDataType.STAIR_DESCENT_SPEED,
   HealthDataType.HANDWASHING_EVENT,
   HealthDataType.UV_EXPOSURE,
+  HealthDataType.DIETARY_ENERGY_CONSUMED,
+  HealthDataType.DIETARY_FAT_TOTAL,
+  HealthDataType.DIETARY_FAT_SATURATED,
+  HealthDataType.DIETARY_CHOLESTEROL,
+  HealthDataType.DIETARY_CARBOHYDRATES,
+  HealthDataType.DIETARY_FIBER,
+  HealthDataType.DIETARY_SUGAR,
+  HealthDataType.DIETARY_PROTEIN,
+  HealthDataType.DIETARY_CALCIUM,
+  HealthDataType.DIETARY_IRON,
+  HealthDataType.DIETARY_POTASSIUM,
+  HealthDataType.DIETARY_SODIUM,
+  HealthDataType.DIETARY_VITAMIN_A,
+  HealthDataType.DIETARY_VITAMIN_C,
+  HealthDataType.DIETARY_VITAMIN_D,
 ];
 
 /// List of data types available on Android
@@ -214,6 +246,23 @@ const Map<HealthDataType, HealthDataUnit> _dataTypeToUnit = {
   HealthDataType.LOW_HEART_RATE_EVENT: HealthDataUnit.NO_UNIT,
   HealthDataType.IRREGULAR_HEART_RATE_EVENT: HealthDataUnit.NO_UNIT,
   HealthDataType.HEART_RATE_VARIABILITY_SDNN: HealthDataUnit.MILLISECONDS,
+
+  /// Nutrition health-types
+  HealthDataType.DIETARY_ENERGY_CONSUMED: HealthDataUnit.CALORIES,
+  HealthDataType.DIETARY_FAT_TOTAL: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_FAT_SATURATED: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_CHOLESTEROL: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_CARBOHYDRATES: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_FIBER: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_SUGAR: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_PROTEIN: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_CALCIUM: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_IRON: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_POTASSIUM: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_SODIUM: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_VITAMIN_A: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_VITAMIN_C: HealthDataUnit.KILOGRAMS,
+  HealthDataType.DIETARY_VITAMIN_D: HealthDataUnit.KILOGRAMS,
 };
 
 const HealthDataTypeJsonValue = {
@@ -279,6 +328,21 @@ const HealthDataTypeJsonValue = {
   HealthDataType.HANDWASHING_EVENT: 'handwashing_event',
   HealthDataType.UV_EXPOSURE: 'uv_exposure',
   HealthDataType.VO2_MAX: 'vo2_max',
+  HealthDataType.DIETARY_ENERGY_CONSUMED: 'dietary_energy_consumed',
+  HealthDataType.DIETARY_FAT_TOTAL: 'dietary_fat_total',
+  HealthDataType.DIETARY_FAT_SATURATED: 'dietary_fat_saturated',
+  HealthDataType.DIETARY_CHOLESTEROL: 'dietary_cholesterol',
+  HealthDataType.DIETARY_CARBOHYDRATES: 'dietary_carbohydrates',
+  HealthDataType.DIETARY_FIBER: 'dietary_fiber',
+  HealthDataType.DIETARY_SUGAR: 'dietary_sugar',
+  HealthDataType.DIETARY_PROTEIN: 'dietary_protein',
+  HealthDataType.DIETARY_CALCIUM: 'dietary_calcium',
+  HealthDataType.DIETARY_IRON: 'dietary_iron',
+  HealthDataType.DIETARY_POTASSIUM: 'dietary_potassium',
+  HealthDataType.DIETARY_SODIUM: 'dietary_sodium',
+  HealthDataType.DIETARY_VITAMIN_A: 'dietary_vitamin_a',
+  HealthDataType.DIETARY_VITAMIN_C: 'dietary_vitamin_c',
+  HealthDataType.DIETARY_VITAMIN_D: 'dietary_vitamin_d',
 };
 
 const HealthDataUnitJsonValue = {
