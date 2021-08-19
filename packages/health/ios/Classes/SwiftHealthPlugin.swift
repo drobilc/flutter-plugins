@@ -91,7 +91,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let DIETARY_VITAMIN_C = "DIETARY_VITAMIN_C"
     let DIETARY_VITAMIN_D = "DIETARY_VITAMIN_D"
 
-    let catagoryTypes = ["STEPS","ACTIVE_ENERGY_BURNED","BASAL_ENERGY_BURNED","DISTANCE_WALKING_RUNNING","FLIGHTS_CLIMBED","DISTANCE_CYCLING",]
+    let catagoryTypes = ["STEPS","ACTIVE_ENERGY_BURNED","BASAL_ENERGY_BURNED","DISTANCE_WALKING_RUNNING","FLIGHTS_CLIMBED","DISTANCE_CYCLING","RESTING_HEART_RATE",]
 
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -210,7 +210,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         let dateTo = Date(timeIntervalSince1970: endDateModified / 1000)
 
         
-
+    
         let dataType = dataTypeLookUp(key: dataTypeKey)
         let predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: .strictStartDate)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
@@ -283,7 +283,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
 
         let query = HKStatisticsCollectionQuery.init(quantityType: quantityObj,
                                                      quantitySamplePredicate: nil,
-                                                     options: (dataTypeKey == "HEART_RATE" || dataTypeKey == "RESTING_HEART_RATE" ) ? [.discreteAverage , .discreteMin ,.discreteMax , .separateBySource] : [.cumulativeSum, .separateBySource],
+                                                     options: (dataTypeKey == "HEART_RATE" || dataTypeKey == "RESTING_HEART_RATE") ? [.discreteAverage , .discreteMin ,.discreteMax , .separateBySource] : [.cumulativeSum, .separateBySource],
                                                      anchorDate: date,
                                                      intervalComponents: interval)
         
@@ -496,6 +496,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             commumativedataTypesDict[DISTANCE_CYCLING] = HKObjectType.quantityType(forIdentifier: .distanceCycling)
             commumativedataTypesDict[HEART_RATE] = HKObjectType.quantityType(forIdentifier: .heartRate)
             commumativedataTypesDict[RESTING_HEART_RATE] = HKObjectType.quantityType(forIdentifier: .restingHeartRate)
+            commumativedataTypesDict[HEART_RATE_VARIABILITY_SDNN] = HKObjectType.quantityType(forIdentifier: .heartRateVariabilitySDNN)
             // ==================================================================================================================
             dataTypesDict[STEPS] = HKSampleType.quantityType(forIdentifier: .stepCount)!
             dataTypesDict[WAIST_CIRCUMFERENCE] = HKSampleType.quantityType(forIdentifier: .waistCircumference)!
