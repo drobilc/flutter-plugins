@@ -116,10 +116,14 @@ class HealthFactory {
         final List dtapoint = e['val'];
         dtapoint.forEach((element) {
           final num value = element['value'];
-          final DateTime from =
+          DateTime from =
               DateTime.fromMillisecondsSinceEpoch(element['date_from']).toUtc();
-          final DateTime to =
+          DateTime to =
               DateTime.fromMillisecondsSinceEpoch(element['date_to']).toUtc();
+          if (dataType == HealthDataType.HEART_RATE_VARIABILITY_SDNN) {
+            from = from.add(Duration(hours: 2));
+            to = to.add(Duration(hours: 2));
+          }
           final String sourceId = element["source_id"];
           final String sourceName = element["source_name"];
           hdpList.add(HealthDataPoint(
