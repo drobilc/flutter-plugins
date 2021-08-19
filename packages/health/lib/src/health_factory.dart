@@ -115,7 +115,7 @@ class HealthFactory {
       for (Map e in fetchedDataPoints) {
         final List dtapoint = e['val'];
         dtapoint.forEach((element) {
-          final num value = element['value'];
+          num value = element['value'];
           DateTime from =
               DateTime.fromMillisecondsSinceEpoch(element['date_from']).toUtc();
           DateTime to =
@@ -127,6 +127,8 @@ class HealthFactory {
           }
           final String sourceId = element["source_id"];
           final String sourceName = element["source_name"];
+          if (dataType == HealthDataType.HEART_RATE_VARIABILITY_SDNN)
+            value = value.ceil();
           hdpList.add(HealthDataPoint(
             value,
             dataType,
