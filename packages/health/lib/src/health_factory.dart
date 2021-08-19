@@ -120,7 +120,8 @@ class HealthFactory {
               DateTime.fromMillisecondsSinceEpoch(element['date_from']).toUtc();
           DateTime to =
               DateTime.fromMillisecondsSinceEpoch(element['date_to']).toUtc();
-          if (dataType == HealthDataType.HEART_RATE_VARIABILITY_SDNN) {
+          if (dataType == HealthDataType.HEART_RATE_VARIABILITY_SDNN ||
+              dataType == HealthDataType.WALKING_HEART_RATE) {
             from = from.add(Duration(hours: 2));
             to = to.add(Duration(hours: 2));
           }

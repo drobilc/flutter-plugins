@@ -91,7 +91,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let DIETARY_VITAMIN_C = "DIETARY_VITAMIN_C"
     let DIETARY_VITAMIN_D = "DIETARY_VITAMIN_D"
 
-    let catagoryTypes = ["STEPS","ACTIVE_ENERGY_BURNED","BASAL_ENERGY_BURNED","DISTANCE_WALKING_RUNNING","FLIGHTS_CLIMBED","DISTANCE_CYCLING","RESTING_HEART_RATE",]
+    let catagoryTypes = ["STEPS","ACTIVE_ENERGY_BURNED","BASAL_ENERGY_BURNED","DISTANCE_WALKING_RUNNING","FLIGHTS_CLIMBED","DISTANCE_CYCLING","RESTING_HEART_RATE","APPLE_EXERCISE_TIME"]
 
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -465,6 +465,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         }
         if #available(iOS 9.3, *) {
             dataTypesDict[APPLE_EXERCISE_TIME] = HKSampleType.quantityType(forIdentifier: .appleExerciseTime)!
+            commumativedataTypesDict[APPLE_EXERCISE_TIME] = HKObjectType.quantityType(forIdentifier: .appleExerciseTime) 
         }
         if #available(iOS 10.0, *) {
             dataTypesDict[PUSH_COUNT] = HKSampleType.quantityType(forIdentifier: .pushCount)!
