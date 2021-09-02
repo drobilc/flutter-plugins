@@ -107,7 +107,13 @@ class HealthFactory {
       'endDate': endDate.millisecondsSinceEpoch
     };
 
-    final unit = _dataTypeToUnit[dataType]!;
+    var unit = _dataTypeToUnit[dataType]!;
+
+    List<HealthDataType> hourErrorhealthTypes = [
+      HealthDataType.HEART_RATE_VARIABILITY_SDNN,
+      HealthDataType.WALKING_HEART_RATE,
+      HealthDataType.WALKING_RUNNING_DURATION,
+    ];
 
     final fetchedDataPoints = await _channel.invokeMethod('getData', args);
     List<HealthDataPoint> hdpList = [];
@@ -120,13 +126,16 @@ class HealthFactory {
               DateTime.fromMillisecondsSinceEpoch(element['date_from']).toUtc();
           DateTime to =
               DateTime.fromMillisecondsSinceEpoch(element['date_to']).toUtc();
-          if (dataType == HealthDataType.HEART_RATE_VARIABILITY_SDNN ||
-              dataType == HealthDataType.WALKING_HEART_RATE) {
+          if (hourErrorhealthTypes.contains(dataType)) {
             from = from.add(Duration(hours: 2));
             to = to.add(Duration(hours: 2));
           }
           final String sourceId = element["source_id"];
           final String sourceName = element["source_name"];
+          if (dataType == HealthDataType.WALKING_RUNNING_DURATION) {
+            value = to.difference(from).inSeconds / 60;
+            unit = HealthDataUnit.MINUTES;
+          }
           if (dataType == HealthDataType.HEART_RATE_VARIABILITY_SDNN)
             value = value.ceil();
           hdpList.add(HealthDataPoint(

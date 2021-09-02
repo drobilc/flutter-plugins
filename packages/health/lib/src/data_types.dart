@@ -59,6 +59,9 @@ enum HealthDataType {
   HANDWASHING_EVENT,
   UV_EXPOSURE,
 
+// Activity duration
+  WALKING_RUNNING_DURATION,
+
 // Heart Rate events (specific to Apple Watch)
   HIGH_HEART_RATE_EVENT,
   LOW_HEART_RATE_EVENT,
@@ -143,6 +146,7 @@ const List<HealthDataType> _dataTypeKeysIOS = [
   HealthDataType.STAIR_DESCENT_SPEED,
   HealthDataType.HANDWASHING_EVENT,
   HealthDataType.UV_EXPOSURE,
+  HealthDataType.WALKING_RUNNING_DURATION,
   HealthDataType.DIETARY_ENERGY_CONSUMED,
   HealthDataType.DIETARY_FAT_TOTAL,
   HealthDataType.DIETARY_FAT_SATURATED,
@@ -234,6 +238,7 @@ const Map<HealthDataType, HealthDataUnit> _dataTypeToUnit = {
   HealthDataType.STAIR_DESCENT_SPEED: HealthDataUnit.KILOMETERS_PER_HOUR,
   HealthDataType.HANDWASHING_EVENT: HealthDataUnit.NO_UNIT,
   HealthDataType.UV_EXPOSURE: HealthDataUnit.COUNT,
+  HealthDataType.WALKING_RUNNING_DURATION: HealthDataUnit.MINUTES,
 
   HealthDataType.WATER: HealthDataUnit.LITER,
   HealthDataType.SLEEP_IN_BED: HealthDataUnit.MINUTES,
@@ -327,6 +332,7 @@ const HealthDataTypeJsonValue = {
   HealthDataType.STAIR_DESCENT_SPEED: 'stair_descent_speed',
   HealthDataType.HANDWASHING_EVENT: 'handwashing_event',
   HealthDataType.UV_EXPOSURE: 'uv_exposure',
+  HealthDataType.WALKING_RUNNING_DURATION: 'walking_running_duration',
   HealthDataType.VO2_MAX: 'vo2_max',
   HealthDataType.DIETARY_ENERGY_CONSUMED: 'dietary_energy_consumed',
   HealthDataType.DIETARY_FAT_TOTAL: 'dietary_fat_total',

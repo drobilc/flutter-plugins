@@ -74,6 +74,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let HANDWASHING_EVENT = "HANDWASHING_EVENT"
     let UV_EXPOSURE = "UV_EXPOSURE"
     let VO2_MAX = "VO2_MAX"
+    let WALKING_RUNNING_DURATION = "WALKING_RUNNING_DURATION"
     // Nutrition health-types
     let DIETARY_ENERGY_CONSUMED = "DIETARY_ENERGY_CONSUMED"
     let DIETARY_FAT_TOTAL = "DIETARY_FAT_TOTAL"
@@ -410,6 +411,8 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[HIGH_HEART_RATE_EVENT] = HKUnit.init(from: "")
         unitDict[LOW_HEART_RATE_EVENT] = HKUnit.init(from: "")
         unitDict[IRREGULAR_HEART_RATE_EVENT] = HKUnit.init(from: "")
+        unitDict[WALKING_RUNNING_DURATION] = HKUnit.meter()  // we will change the value of this parameter to minutes in flutter side
+                                                             // of the plugin
 
         // Nutrition health-types
         unitDict[DIETARY_ENERGY_CONSUMED] = HKUnit.kilocalorie()
@@ -512,6 +515,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[SLEEP_AWAKE] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
             dataTypesDict[DISTANCE_CYCLING] = HKSampleType.quantityType(forIdentifier: .distanceCycling)!
             dataTypesDict[VO2_MAX] = HKSampleType.quantityType(forIdentifier: .vo2Max)!
+            dataTypesDict[WALKING_RUNNING_DURATION] = HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!
         }
         if #available(iOS 11.2, *) {
             dataTypesDict[DISTANCE_DOWNGHILL_SNOW_SPORTS] = HKSampleType.quantityType(forIdentifier: .distanceDownhillSnowSports)!
