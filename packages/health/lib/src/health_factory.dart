@@ -113,6 +113,14 @@ class HealthFactory {
       HealthDataType.HEART_RATE_VARIABILITY_SDNN,
       HealthDataType.WALKING_HEART_RATE,
       HealthDataType.WALKING_RUNNING_DURATION,
+      HealthDataType.CYCLING_DURATION,
+      HealthDataType.SWIMMING_DURATION,
+    ];
+
+    List<HealthDataType> activityDurationhealthTypes = [
+      HealthDataType.WALKING_RUNNING_DURATION,
+      HealthDataType.CYCLING_DURATION,
+      HealthDataType.SWIMMING_DURATION,
     ];
 
     final fetchedDataPoints = await _channel.invokeMethod('getData', args);
@@ -132,7 +140,7 @@ class HealthFactory {
           }
           final String sourceId = element["source_id"];
           final String sourceName = element["source_name"];
-          if (dataType == HealthDataType.WALKING_RUNNING_DURATION) {
+          if (activityDurationhealthTypes.contains(dataType)) {
             value = to.difference(from).inSeconds / 60;
             unit = HealthDataUnit.MINUTES;
           }
