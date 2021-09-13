@@ -130,16 +130,23 @@ class HealthFactory {
         final List dtapoint = e['val'];
         dtapoint.forEach((element) {
           num value = element['value'];
+
+          //Convert dateTime to UTC
           DateTime from =
               DateTime.fromMillisecondsSinceEpoch(element['date_from']).toUtc();
           DateTime to =
               DateTime.fromMillisecondsSinceEpoch(element['date_to']).toUtc();
+
+          // Add 2 hours to the selected dataTypes
           if (hourErrorhealthTypes.contains(dataType)) {
             from = from.add(Duration(hours: 2));
             to = to.add(Duration(hours: 2));
           }
+
           final String sourceId = element["source_id"];
           final String sourceName = element["source_name"];
+
+          //Convert value to minutes with decimals points
           if (activityDurationhealthTypes.contains(dataType)) {
             value = to.difference(from).inSeconds / 60;
             unit = HealthDataUnit.MINUTES;
