@@ -63,13 +63,55 @@ class HealthFactory {
     return bmiHealthPoints;
   }
 
+  Future<List<HealthDataPoint>> sumedCalories(
+      DateTime startDate, DateTime endDate) async {
+    List<HealthDataPoint> result = [];
+
+    final resultActiveEnergy = await _prepareQuery(
+        startDate, endDate, HealthDataType.ACTIVE_ENERGY_BURNED);
+    final resultBasalEnergy = await _prepareQuery(
+        startDate, endDate, HealthDataType.BASAL_ENERGY_BURNED);
+    resultActiveEnergy.forEach((element) {
+      final value = element.value +
+          resultBasalEnergy
+              .where((basalElement) =>
+                  basalElement._dateFrom == element.dateFrom &&
+                  basalElement.dateTo == element.dateTo)
+              .first
+              .value;
+
+      result.add(HealthDataPoint.create(
+        value: value,
+        type: HealthDataType.CALORIES,
+        unit: element.unit,
+        dateFrom: element.dateFrom,
+        dateTo: element.dateTo,
+        platform: element.platform,
+        deviceId: element.deviceId,
+        sourceId: element.sourceId,
+        sourceName: element.sourceName,
+      ));
+    });
+
+    return result;
+  }
+
   /// Get an list of [HealthDataPoint] from an list of [HealthDataType]
   Future<List<HealthDataPoint>> getHealthDataFromTypes(
       DateTime startDate, DateTime endDate, List<HealthDataType> types) async {
     final dataPoints = <HealthDataPoint>[];
 
     for (var type in types) {
-      final result = await _prepareQuery(startDate, endDate, type);
+      List<HealthDataPoint> result = [];
+      // Since CALORIES is sum of ACTIVE_ENERGY_BURNED and BASAL_ENERGY_BURNED,
+      //we don't query those.
+      if (type == HealthDataType.ACTIVE_ENERGY_BURNED ||
+          type == HealthDataType.BASAL_ENERGY_BURNED) continue;
+      if (type == HealthDataType.CALORIES) {
+        sumedCalories(startDate, endDate);
+      } else {
+        result = await _prepareQuery(startDate, endDate, type);
+      }
       dataPoints.addAll(result);
     }
     return removeDuplicates(dataPoints);

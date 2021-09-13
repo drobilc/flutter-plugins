@@ -4,6 +4,7 @@ part of health;
 enum HealthDataType {
   ACTIVE_ENERGY_BURNED,
   BASAL_ENERGY_BURNED,
+  CALORIES, // Its the sum of ACTIVE_ENERGY_BURNED and BASAL_ENERGY_BURNED
   BLOOD_GLUCOSE,
   BLOOD_OXYGEN,
   BLOOD_PRESSURE_DIASTOLIC,
@@ -92,6 +93,7 @@ enum HealthDataType {
 const List<HealthDataType> _dataTypeKeysIOS = [
   HealthDataType.ACTIVE_ENERGY_BURNED,
   HealthDataType.BASAL_ENERGY_BURNED,
+  HealthDataType.CALORIES,
   HealthDataType.BLOOD_GLUCOSE,
   HealthDataType.BLOOD_OXYGEN,
   HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
@@ -171,6 +173,7 @@ const List<HealthDataType> _dataTypeKeysIOS = [
 /// List of data types available on Android
 const List<HealthDataType> _dataTypeKeysAndroid = [
   HealthDataType.ACTIVE_ENERGY_BURNED,
+  HealthDataType.CALORIES,
   HealthDataType.BLOOD_GLUCOSE,
   HealthDataType.BLOOD_OXYGEN,
   HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
@@ -193,6 +196,7 @@ const List<HealthDataType> _dataTypeKeysAndroid = [
 const Map<HealthDataType, HealthDataUnit> _dataTypeToUnit = {
   HealthDataType.ACTIVE_ENERGY_BURNED: HealthDataUnit.CALORIES,
   HealthDataType.BASAL_ENERGY_BURNED: HealthDataUnit.CALORIES,
+  HealthDataType.CALORIES: HealthDataUnit.CALORIES,
   HealthDataType.BLOOD_GLUCOSE: HealthDataUnit.MILLIGRAM_PER_DECILITER,
   HealthDataType.BLOOD_OXYGEN: HealthDataUnit.PERCENTAGE,
   HealthDataType.BLOOD_PRESSURE_DIASTOLIC: HealthDataUnit.MILLIMETER_OF_MERCURY,
@@ -279,6 +283,7 @@ const Map<HealthDataType, HealthDataUnit> _dataTypeToUnit = {
 const HealthDataTypeJsonValue = {
   HealthDataType.ACTIVE_ENERGY_BURNED: 'active_energy_burned',
   HealthDataType.BASAL_ENERGY_BURNED: 'basal_energy_burned',
+  HealthDataType.CALORIES: 'calories',
   HealthDataType.BLOOD_GLUCOSE: 'blood_glucose',
   HealthDataType.BLOOD_OXYGEN: 'blood_oxygen',
   HealthDataType.BLOOD_PRESSURE_DIASTOLIC: 'blood_pressure_diastolic',
