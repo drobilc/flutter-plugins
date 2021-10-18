@@ -108,7 +108,7 @@ class HealthFactory {
       if (type == HealthDataType.ACTIVE_ENERGY_BURNED ||
           type == HealthDataType.BASAL_ENERGY_BURNED) continue;
       if (type == HealthDataType.CALORIES) {
-        sumedCalories(startDate, endDate);
+        result = await sumedCalories(startDate, endDate);
       } else {
         result = await _prepareQuery(startDate, endDate, type);
       }
