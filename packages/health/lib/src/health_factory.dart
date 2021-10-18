@@ -108,7 +108,7 @@ class HealthFactory {
       if (type == HealthDataType.ACTIVE_ENERGY_BURNED ||
           type == HealthDataType.BASAL_ENERGY_BURNED) continue;
       if (type == HealthDataType.CALORIES) {
-        result = await sumedCalories(startDate, endDate);
+        sumedCalories(startDate, endDate);
       } else {
         result = await _prepareQuery(startDate, endDate, type);
       }
@@ -175,15 +175,18 @@ class HealthFactory {
 
           //Convert dateTime to UTC
           DateTime from =
-              DateTime.fromMillisecondsSinceEpoch(element['date_from']).toUtc();
-          DateTime to =
-              DateTime.fromMillisecondsSinceEpoch(element['date_to']).toUtc();
+              DateTime.fromMillisecondsSinceEpoch(element['date_from']);
+          DateTime to = DateTime.fromMillisecondsSinceEpoch(element['date_to']);
+
+          from = DateTime.utc(
+              from.year, from.month, from.day, from.hour, from.minute);
+          to = DateTime.utc(to.year, to.month, to.day, to.hour, to.minute);
 
           // Add 2 hours to the selected dataTypes
-          if (hourErrorhealthTypes.contains(dataType)) {
-            from = from.add(Duration(hours: 2));
-            to = to.add(Duration(hours: 2));
-          }
+          // if (hourErrorhealthTypes.contains(dataType)) {
+          //   from = from.add(Duration(hours: 2));
+          //   to = to.add(Duration(hours: 2));
+          // }
 
           final String sourceId = element["source_id"];
           final String sourceName = element["source_name"];

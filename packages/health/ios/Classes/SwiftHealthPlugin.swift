@@ -302,8 +302,8 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                                            dataList.append(
                                              [
                                                 "value": result.averageQuantity()?.doubleValue(for: unitType) ?? 0,
-                                                "date_from": Int((result.startDate.timeIntervalSince1970 + 86400) * 1000),
-                                                "date_to": Int((result.startDate.timeIntervalSince1970 + 86400) * 1000),
+                                                "date_from": Int((result.startDate.timeIntervalSince1970) * 1000),
+                                                "date_to": Int((result.startDate.timeIntervalSince1970) * 1000),
                                                 "source_id": "_",
                                                 "source_name": "Cumulitive"
                                              ]
@@ -313,8 +313,8 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                                              dataList.append(
                                              [
                                                 "value": result.sumQuantity()?.doubleValue(for: unitType) ?? 0,
-                                                "date_from": Int((result.startDate.timeIntervalSince1970 + 86400) * 1000),
-                                                "date_to": Int((result.startDate.timeIntervalSince1970 + 86400) * 1000),
+                                                "date_from": Int((result.startDate.timeIntervalSince1970) * 1000),
+                                                "date_to": Int((result.startDate.timeIntervalSince1970) * 1000),
                                                 "source_id": "_",
                                                 "source_name": "Cumulitive"
                                              ]
