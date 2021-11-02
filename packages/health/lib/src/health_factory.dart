@@ -174,13 +174,11 @@ class HealthFactory {
           num value = element['value'];
 
           //Convert dateTime to UTC
-          DateTime from =
-              DateTime.fromMillisecondsSinceEpoch(element['date_from']);
-          DateTime to = DateTime.fromMillisecondsSinceEpoch(element['date_to']);
-
-          from = DateTime.utc(
-              from.year, from.month, from.day, from.hour, from.minute);
-          to = DateTime.utc(to.year, to.month, to.day, to.hour, to.minute);
+          DateTime from = DateTime.fromMillisecondsSinceEpoch(
+              element['date_from'],
+              isUtc: true);
+          DateTime to = DateTime.fromMillisecondsSinceEpoch(element['date_to'],
+              isUtc: true);
 
           // Add 2 hours to the selected dataTypes
           // if (hourErrorhealthTypes.contains(dataType)) {
