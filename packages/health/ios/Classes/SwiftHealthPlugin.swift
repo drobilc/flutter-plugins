@@ -120,6 +120,11 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         else if (call.method.elementsEqual("getData")){
             getData(call: call, result: result)
         }
+
+         /// Handle getWorkoutData
+        else if (call.method.elementsEqual("getWorkoutData")){
+            loadWorkoutData(completion: result)
+        }
     }
 
     func checkIfHealthDataAvailable(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -131,7 +136,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         let types = (arguments?["types"] as? Array) ?? []
 
         var typesToRequest = Set<HKSampleType>()
-
+        typesToRequest.insert(HKObjectType.workoutType())
         for key in types {
             let keyString = "\(key)"
             typesToRequest.insert(dataTypeLookUp(key: keyString))
@@ -335,6 +340,76 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         }
     }
 
+    func getWorkoutData (completion:
+                        @escaping FlutterResult , sourcesSet: Set<HKSource>?) {
+      
+      // Get all workouts that came from all apps.
+       let sourcePredicate = HKQuery.predicateForObjects(from: sourcesSet ?? [] );
+      
+      // Combine the predicates into a single predicate.
+      let compound = NSCompoundPredicate(andPredicateWithSubpredicates:
+        [ sourcePredicate])
+    
+      let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,
+                                          ascending: true)
+    
+    let query = HKSampleQuery(
+      sampleType: .workoutType(),
+      predicate: compound,
+      limit: 0,
+      sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+        DispatchQueue.main.async {
+            
+          guard
+            let samples = samples as? [HKWorkout],
+            error == nil
+            else {
+              completion(["hai":"\(error)"])
+            return
+          }
+          
+            let newMap: [NSDictionary] =  samples.map { sample -> NSDictionary in
+                                    return [
+                                        "uuid": "\(sample.uuid)",
+                                        "total_distance": sample.totalDistance?.doubleValue(for: HKUnit.meterUnit(with: HKMetricPrefix.kilo)) ?? 0.0,
+                                        "total_energy_burned": sample.totalEnergyBurned?.doubleValue(for: HKUnit.largeCalorie()) ?? 0.0,
+                                        "total_flights_climbed": sample.totalFlightsClimbed?.doubleValue(for: HKUnit.count()) ?? 0,
+                                        "total_swimming_stroke_count": sample.totalSwimmingStrokeCount?.doubleValue(for: HKUnit.count()) ?? 0,
+                                        "duration": sample.duration, // In seconds
+                                        "workout_type": sample.workoutActivityType.commonName,
+                                        "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
+                                        "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
+                                        "source_id": sample.sourceRevision.source.bundleIdentifier,
+                                        "source_name": sample.sourceRevision.source.name,
+                                    ]
+            }
+            
+          completion(newMap)
+        }
+    }
+    
+    HKHealthStore().execute(query)
+  }
+  
+   func loadWorkoutData(completion:
+      @escaping FlutterResult) {
+   
+      // Query the available source apps to collect workout data from
+      let secondquery =  HKSourceQuery.init(sampleType: HKSampleType.workoutType(), samplePredicate: nil) { (query, samples, error) in
+          DispatchQueue.main.async {
+            //4. Cast the samples as HKWorkout
+              let  sourceApps : Set<HKSource>? = samples;
+              
+              self.getWorkoutData(completion: completion, sourcesSet: sourceApps);
+                
+          }
+      }
+      
+      HKHealthStore().execute(secondquery)
+      
+      
+  }
+
     func unitLookUp(key: String) -> HKUnit {
         guard let unit = unitDict[key] else {
             return HKUnit.count()
@@ -342,13 +417,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         return unit
     }
 
-    // func dataQuantityTypeLookUp(key: String) -> HKQuantityType {
-    //     guard let dataType_ = dataTypesDict[key] else {
-    //         return HKSampleType.quantityType(forIdentifier: .bodyMass)!
-    //     }
-    //     return dataType_
-    // }
-
+    
     func dataTypeLookUp(key: String) -> HKSampleType {
         guard let dataType_ = dataTypesDict[key] else {
             return HKSampleType.quantityType(forIdentifier: .bodyMass)!
@@ -580,6 +649,248 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         // Concatenate heart events and health data types (both may be empty)
         allDataTypes = Set(heartRateEventTypes + healthDataTypes)
     }
+}
+
+
+extension HKWorkoutActivityType {
+    
+    /*
+     Simple mapping of available workout types to a human readable name.
+     */
+    var name: String {
+        switch self {
+        case .americanFootball:             return "American Football"
+        case .archery:                      return "Archery"
+        case .australianFootball:           return "Australian Football"
+        case .badminton:                    return "Badminton"
+        case .baseball:                     return "Baseball"
+        case .basketball:                   return "Basketball"
+        case .bowling:                      return "Bowling"
+        case .boxing:                       return "Boxing"
+        case .climbing:                     return "Climbing"
+        case .crossTraining:                return "Cross Training"
+        case .curling:                      return "Curling"
+        case .cycling:                      return "Cycling"
+        case .dance:                        return "Dance"
+        case .danceInspiredTraining:        return "Dance Inspired Training"
+        case .elliptical:                   return "Elliptical"
+        case .equestrianSports:             return "Equestrian Sports"
+        case .fencing:                      return "Fencing"
+        case .fishing:                      return "Fishing"
+        case .functionalStrengthTraining:   return "Functional Strength Training"
+        case .golf:                         return "Golf"
+        case .gymnastics:                   return "Gymnastics"
+        case .handball:                     return "Handball"
+        case .hiking:                       return "Hiking"
+        case .hockey:                       return "Hockey"
+        case .hunting:                      return "Hunting"
+        case .lacrosse:                     return "Lacrosse"
+        case .martialArts:                  return "Martial Arts"
+        case .mindAndBody:                  return "Mind and Body"
+        case .mixedMetabolicCardioTraining: return "Mixed Metabolic Cardio Training"
+        case .paddleSports:                 return "Paddle Sports"
+        case .play:                         return "Play"
+        case .preparationAndRecovery:       return "Preparation and Recovery"
+        case .racquetball:                  return "Racquetball"
+        case .rowing:                       return "Rowing"
+        case .rugby:                        return "Rugby"
+        case .running:                      return "Running"
+        case .sailing:                      return "Sailing"
+        case .skatingSports:                return "Skating Sports"
+        case .snowSports:                   return "Snow Sports"
+        case .soccer:                       return "Soccer"
+        case .softball:                     return "Softball"
+        case .squash:                       return "Squash"
+        case .stairClimbing:                return "Stair Climbing"
+        case .surfingSports:                return "Surfing Sports"
+        case .swimming:                     return "Swimming"
+        case .tableTennis:                  return "Table Tennis"
+        case .tennis:                       return "Tennis"
+        case .trackAndField:                return "Track and Field"
+        case .traditionalStrengthTraining:  return "Traditional Strength Training"
+        case .volleyball:                   return "Volleyball"
+        case .walking:                      return "Walking"
+        case .waterFitness:                 return "Water Fitness"
+        case .waterPolo:                    return "Water Polo"
+        case .waterSports:                  return "Water Sports"
+        case .wrestling:                    return "Wrestling"
+        case .yoga:                         return "Yoga"
+        
+        // iOS 10
+        case .barre:                        return "Barre"
+        case .coreTraining:                 return "Core Training"
+        case .crossCountrySkiing:           return "Cross Country Skiing"
+        case .downhillSkiing:               return "Downhill Skiing"
+        case .flexibility:                  return "Flexibility"
+        case .highIntensityIntervalTraining:    return "High Intensity Interval Training"
+        case .jumpRope:                     return "Jump Rope"
+        case .kickboxing:                   return "Kickboxing"
+        case .pilates:                      return "Pilates"
+        case .snowboarding:                 return "Snowboarding"
+        case .stairs:                       return "Stairs"
+        case .stepTraining:                 return "Step Training"
+        case .wheelchairWalkPace:           return "Wheelchair Walk Pace"
+        case .wheelchairRunPace:            return "Wheelchair Run Pace"
+        
+        // iOS 11
+        case .taiChi:                       return "Tai Chi"
+        case .mixedCardio:                  return "Mixed Cardio"
+        case .handCycling:                  return "Hand Cycling"
+        
+        // iOS 13
+        case .discSports:                   return "Disc Sports"
+        case .fitnessGaming:                return "Fitness Gaming"
+        
+        // Catch-all
+        default:                            return "Other"
+        }
+    }
+    
+    /*
+     Additional mapping for common name for activity types where appropriate.
+     */
+    var commonName: String {
+        switch self {
+        case .highIntensityIntervalTraining: return "HIIT"
+        default: return name
+        }
+    }
+    
+    /*
+     Mapping of available activity types to emojis, where an appropriate gender-agnostic emoji is available.
+     */
+    var associatedEmoji: String? {
+        switch self {
+        case .americanFootball:             return "🏈"
+        case .archery:                      return "🏹"
+        case .badminton:                    return "🏸"
+        case .baseball:                     return "⚾️"
+        case .basketball:                   return "🏀"
+        case .bowling:                      return "🎳"
+        case .boxing:                       return "🥊"
+        case .curling:                      return "🥌"
+        case .cycling:                      return "🚲"
+        case .equestrianSports:             return "🏇"
+        case .fencing:                      return "🤺"
+        case .fishing:                      return "🎣"
+        case .functionalStrengthTraining:   return "💪"
+        case .golf:                         return "⛳️"
+        case .hiking:                       return "🥾"
+        case .hockey:                       return "🏒"
+        case .lacrosse:                     return "🥍"
+        case .martialArts:                  return "🥋"
+        case .mixedMetabolicCardioTraining: return "❤️"
+        case .paddleSports:                 return "🛶"
+        case .rowing:                       return "🛶"
+        case .rugby:                        return "🏉"
+        case .sailing:                      return "⛵️"
+        case .skatingSports:                return "⛸"
+        case .snowSports:                   return "🛷"
+        case .soccer:                       return "⚽️"
+        case .softball:                     return "🥎"
+        case .tableTennis:                  return "🏓"
+        case .tennis:                       return "🎾"
+        case .traditionalStrengthTraining:  return "🏋️‍♂️"
+        case .volleyball:                   return "🏐"
+        case .waterFitness, .waterSports:   return "💧"
+        
+        // iOS 10
+        case .barre:                        return "🥿"
+        case .crossCountrySkiing:           return "⛷"
+        case .downhillSkiing:               return "⛷"
+        case .kickboxing:                   return "🥋"
+        case .snowboarding:                 return "🏂"
+        
+        // iOS 11
+        case .mixedCardio:                  return "❤️"
+        
+        // iOS 13
+        case .discSports:                   return "🥏"
+        case .fitnessGaming:                return "🎮"
+        
+        // Catch-all
+        default:                            return nil
+        }
+    }
+    
+    enum EmojiGender {
+        case male
+        case female
+    }
+    
+    /*
+     Mapping of available activity types to appropriate gender specific emojies.
+     
+     If a gender neutral symbol is available this simply returns the value of `associatedEmoji`.
+     */
+    func associatedEmoji(for gender: EmojiGender) -> String? {
+        switch self {
+        case .climbing:
+            switch gender {
+            case .female:                   return "🧗‍♀️"
+            case .male:                     return "🧗🏻‍♂️"
+            }
+        case .dance, .danceInspiredTraining:
+            switch gender {
+            case .female:                   return "💃"
+            case .male:                     return "🕺🏿"
+            }
+        case .gymnastics:
+            switch gender {
+            case .female:                   return "🤸‍♀️"
+            case .male:                     return "🤸‍♂️"
+            }
+        case .handball:
+            switch gender {
+            case .female:                   return "🤾‍♀️"
+            case .male:                     return "🤾‍♂️"
+            }
+        case .mindAndBody, .yoga, .flexibility:
+            switch gender {
+            case .female:                   return "🧘‍♀️"
+            case .male:                     return "🧘‍♂️"
+            }
+        case .preparationAndRecovery:
+            switch gender {
+            case .female:                   return "🙆‍♀️"
+            case .male:                     return "🙆‍♂️"
+            }
+        case .running:
+            switch gender {
+            case .female:                   return "🏃‍♀️"
+            case .male:                     return "🏃‍♂️"
+            }
+        case .surfingSports:
+            switch gender {
+            case .female:                   return "🏄‍♀️"
+            case .male:                     return "🏄‍♂️"
+            }
+        case .swimming:
+            switch gender {
+            case .female:                   return "🏊‍♀️"
+            case .male:                     return "🏊‍♂️"
+            }
+        case .walking:
+            switch gender {
+            case .female:                   return "🚶‍♀️"
+            case .male:                     return "🚶‍♂️"
+            }
+        case .waterPolo:
+            switch gender {
+            case .female:                   return "🤽‍♀️"
+            case .male:                     return "🤽‍♂️"
+            }
+        case .wrestling:
+            switch gender {
+            case .female:                   return "🤼‍♀️"
+            case .male:                     return "🤼‍♂️"
+            }
+
+        // Catch-all
+        default:                            return associatedEmoji
+        }
+    }
+    
 }
 
 

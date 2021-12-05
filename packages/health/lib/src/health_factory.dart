@@ -117,6 +117,47 @@ class HealthFactory {
     return removeDuplicates(dataPoints);
   }
 
+  Future<List<WorkoutDataPoint>> getWorkoutData() async {
+    List<WorkoutDataPoint> dataPoints = [];
+
+    dataPoints = await _queryWorkoutData();
+    print(dataPoints);
+    return removeWorkoutDuplicates(dataPoints);
+  }
+
+  Future<List<WorkoutDataPoint>> _queryWorkoutData() async {
+    final fetchedDataPoints = await _channel.invokeMethod('getWorkoutData');
+    if (fetchedDataPoints != null) {
+      return fetchedDataPoints.map<WorkoutDataPoint>((e) {
+        final num totalDistance = e['total_distance'];
+        final num totalEnergyBurned = e['total_energy_burned'];
+        final num totalFlightsClimbed = e['total_flights_climbed'];
+        final num totalSwimmingStrokeCount = e['total_swimming_stroke_count'];
+        final num duration = e['duration'];
+        final DateTime from =
+            DateTime.fromMillisecondsSinceEpoch(e['date_from']);
+        final DateTime to = DateTime.fromMillisecondsSinceEpoch(e['date_to']);
+        final String sourceId = e["source_id"];
+        final String sourceName = e["source_name"];
+        final String dataType = e["workout_type"];
+        return WorkoutDataPoint(
+          totalDistance,
+          totalEnergyBurned,
+          totalFlightsClimbed,
+          totalSwimmingStrokeCount,
+          duration,
+          from,
+          to,
+          sourceId,
+          sourceName,
+          dataType,
+        );
+      }).toList();
+    } else {
+      return <WorkoutDataPoint>[];
+    }
+  }
+
   /// Prepares a query, i.e. checks if the types are available, etc.
   Future<List<HealthDataPoint>> _prepareQuery(
       DateTime startDate, DateTime endDate, HealthDataType dataType) async {
@@ -224,6 +265,26 @@ class HealthFactory {
   /// without any duplicates.
   static List<HealthDataPoint> removeDuplicates(List<HealthDataPoint> points) {
     final unique = <HealthDataPoint>[];
+
+    for (var p in points) {
+      var seenBefore = false;
+      for (var s in unique) {
+        if (s == p) {
+          seenBefore = true;
+        }
+      }
+      if (!seenBefore) {
+        unique.add(p);
+      }
+    }
+    return unique;
+  }
+
+  /// Given an array of [HealthDataPoint]s, this method will return the array
+  /// without any duplicates.
+  static List<WorkoutDataPoint> removeWorkoutDuplicates(
+      List<WorkoutDataPoint> points) {
+    final unique = <WorkoutDataPoint>[];
 
     for (var p in points) {
       var seenBefore = false;
