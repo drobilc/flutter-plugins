@@ -129,6 +129,7 @@ class HealthFactory {
     final fetchedDataPoints = await _channel.invokeMethod('getWorkoutData');
     if (fetchedDataPoints != null) {
       return fetchedDataPoints.map<WorkoutDataPoint>((e) {
+        final String uuid = e['uuid'];
         final num totalDistance = e['total_distance'];
         final num totalEnergyBurned = e['total_energy_burned'];
         final num totalFlightsClimbed = e['total_flights_climbed'];
@@ -141,6 +142,7 @@ class HealthFactory {
         final String sourceName = e["source_name"];
         final String dataType = e["workout_type"];
         return WorkoutDataPoint(
+          uuid,
           totalDistance,
           totalEnergyBurned,
           totalFlightsClimbed,

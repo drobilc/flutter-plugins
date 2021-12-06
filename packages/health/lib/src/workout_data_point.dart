@@ -3,6 +3,7 @@ part of health;
 /// A [WorkoutDataPoint] object corresponds to a data point captures from
 /// GoogleFit or Apple HealthKit
 class WorkoutDataPoint {
+  String _uuid;
   num _totalDistance;
   num _totalEnergyBurned;
   num _totalFlightsClimbed;
@@ -15,6 +16,7 @@ class WorkoutDataPoint {
   String _dataType;
 
   WorkoutDataPoint(
+    this._uuid,
     this._totalDistance,
     this._totalEnergyBurned,
     this._totalFlightsClimbed,
@@ -29,6 +31,7 @@ class WorkoutDataPoint {
 
   /// Converts a json object to the [HealthDataPoint]
   factory WorkoutDataPoint.fromJson(json) => WorkoutDataPoint(
+        json['uuid'],
         json['total_distance'],
         json['total_energy_burned'],
         json['total_flights_climbed'],
@@ -43,6 +46,7 @@ class WorkoutDataPoint {
 
   /// Converts the [HealthDataPoint] to a json object
   Map<String, dynamic> toJson() => {
+        'uuid': uuid,
         'total_distance': totalDistance,
         'total_energy_burned': totalEnergyBurned,
         'total_flights_climbed': totalFlightsClimbed,
@@ -57,6 +61,7 @@ class WorkoutDataPoint {
 
   /// Converts the [HealthDataPoint] to a string
   String toString() => '${this.runtimeType} - '
+      'uuid: $uuid, '
       'total_distance: $totalDistance, '
       'total_energy_burned: $totalEnergyBurned, '
       'total_flights_climbed: $totalFlightsClimbed, '
@@ -66,6 +71,8 @@ class WorkoutDataPoint {
       'dateTo: $dateTo, '
       'sourceId: $sourceId,'
       'sourceName: $sourceName,';
+
+  String get uuid => _uuid;
 
   /// Get the quantity value of the data point
   num get totalDistance => _totalDistance;
@@ -99,6 +106,7 @@ class WorkoutDataPoint {
   @override
   bool operator ==(Object o) {
     return o is WorkoutDataPoint &&
+        this.uuid == o.uuid &&
         this.totalDistance == o.totalDistance &&
         this.totalEnergyBurned == o.totalEnergyBurned &&
         this.totalFlightsClimbed == o.totalFlightsClimbed &&
