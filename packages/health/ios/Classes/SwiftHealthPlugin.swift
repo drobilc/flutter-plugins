@@ -345,10 +345,22 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
       
       // Get all workouts that came from all apps.
        let sourcePredicate = HKQuery.predicateForObjects(from: sourcesSet ?? [] );
+
+       let startDate = Calendar.current.date(
+         byAdding: .year,
+         value: -2,
+         to: Date())
+       
+       let endDate = Calendar.current.date(
+        byAdding: .second,
+        value: 0,
+        to: Date())
+       
+       let timePredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate , options: .strictStartDate)
       
       // Combine the predicates into a single predicate.
       let compound = NSCompoundPredicate(andPredicateWithSubpredicates:
-        [ sourcePredicate])
+        [ sourcePredicate, timePredicate])
     
       let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,
                                           ascending: true)
