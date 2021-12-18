@@ -55,8 +55,18 @@ class HealthFactory {
     final bmiHealthPoints = <HealthDataPoint>[];
     for (var i = 0; i < weights.length; i++) {
       final bmiValue = weights[i].value.toDouble() / (h * h);
-      final x = HealthDataPoint(bmiValue, dataType, unit, weights[i].dateFrom,
-          weights[i].dateTo, _platformType, _deviceId!, '', '');
+      final uuid = weights[i].uuid;
+      final x = HealthDataPoint(
+          uuid,
+          bmiValue,
+          dataType,
+          unit,
+          weights[i].dateFrom,
+          weights[i].dateTo,
+          _platformType,
+          _deviceId!,
+          '',
+          '');
 
       bmiHealthPoints.add(x);
     }
@@ -72,6 +82,7 @@ class HealthFactory {
     final resultBasalEnergy = await _prepareQuery(
         startDate, endDate, HealthDataType.BASAL_ENERGY_BURNED);
     resultActiveEnergy.forEach((element) {
+      final uuid = element.uuid;
       final value = element.value +
           resultBasalEnergy
               .where((basalElement) =>
@@ -81,6 +92,7 @@ class HealthFactory {
               .value;
 
       result.add(HealthDataPoint.create(
+        uuid: uuid,
         value: value,
         type: HealthDataType.CALORIES,
         unit: element.unit,
@@ -214,6 +226,7 @@ class HealthFactory {
       for (Map e in fetchedDataPoints) {
         final List dtapoint = e['val'];
         dtapoint.forEach((element) {
+          String uuid = element['uuid'];
           num value = element['value'];
 
           //Convert dateTime to UTC
@@ -245,6 +258,7 @@ class HealthFactory {
           if (dataType == HealthDataType.HEART_RATE_VARIABILITY_SDNN)
             value = value.ceil();
           hdpList.add(HealthDataPoint(
+            uuid,
             value,
             dataType,
             unit,

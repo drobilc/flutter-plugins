@@ -3,6 +3,7 @@ part of health;
 /// A [HealthDataPoint] object corresponds to a data point captures from
 /// GoogleFit or Apple HealthKit
 class HealthDataPoint {
+  String _uuid;
   num _value;
   HealthDataType _type;
   HealthDataUnit _unit;
@@ -14,6 +15,7 @@ class HealthDataPoint {
   String _sourceName;
 
   HealthDataPoint(
+      this._uuid,
       this._value,
       this._type,
       this._unit,
@@ -34,6 +36,7 @@ class HealthDataPoint {
   }
 
   factory HealthDataPoint.create({
+    required String uuid,
     required num value,
     required HealthDataType type,
     required HealthDataUnit unit,
@@ -44,8 +47,8 @@ class HealthDataPoint {
     required String sourceId,
     required String sourceName,
   }) =>
-      HealthDataPoint(value, type, unit, dateFrom, dateTo, platform, deviceId,
-          sourceId, sourceName);
+      HealthDataPoint(uuid, value, type, unit, dateFrom, dateTo, platform,
+          deviceId, sourceId, sourceName);
 
   double _convertMinutes() {
     int ms = dateTo.millisecondsSinceEpoch - dateFrom.millisecondsSinceEpoch;
@@ -54,6 +57,7 @@ class HealthDataPoint {
 
   /// Converts a json object to the [HealthDataPoint]
   factory HealthDataPoint.fromJson(json) => HealthDataPoint(
+      json['uuid'],
       json['value'],
       HealthDataTypeJsonValue.keys.toList()[
           HealthDataTypeJsonValue.values.toList().indexOf(json['data_type'])],
@@ -69,6 +73,7 @@ class HealthDataPoint {
 
   /// Converts the [HealthDataPoint] to a json object
   Map<String, dynamic> toJson() => {
+        'uuid': uuid,
         'value': value,
         'data_type': HealthDataTypeJsonValue[type],
         'unit': HealthDataUnitJsonValue[unit],
@@ -82,6 +87,7 @@ class HealthDataPoint {
 
   /// Converts the [HealthDataPoint] to a string
   String toString() => '${this.runtimeType} - '
+      'uuid: $uuid, '
       'value: $value, '
       'unit: $unit, '
       'dateFrom: $dateFrom, '
@@ -90,6 +96,8 @@ class HealthDataPoint {
       'platform: $platform'
       'sourceId: $sourceId,'
       'sourceName: $sourceName,';
+
+  String get uuid => _uuid;
 
   /// Get the quantity value of the data point
   num get value => _value;
@@ -133,6 +141,7 @@ class HealthDataPoint {
   @override
   bool operator ==(Object o) {
     return o is HealthDataPoint &&
+        this.uuid == o.uuid &&
         this.value == o.value &&
         this.unit == o.unit &&
         this.dateFrom == o.dateFrom &&

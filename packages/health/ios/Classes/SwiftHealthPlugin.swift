@@ -302,10 +302,11 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             var dataList = [[String:Any]]()
 
             results?.enumerateStatistics(from: startDate,
-                                         to: Date(), with: { (result, stop) in
+                                         to: dateTo, with: { (result, stop) in
                                          if(dataTypeKey == "HEART_RATE" || dataTypeKey == "RESTING_HEART_RATE"){
                                            dataList.append(
-                                             [
+                                             [  
+                                                "uuid": "\(result.averageQuantity()?.doubleValue(for: unitType) ?? 0)-\(Int((result.startDate.timeIntervalSince1970) * 1000))",
                                                 "value": result.averageQuantity()?.doubleValue(for: unitType) ?? 0,
                                                 "date_from": Int((result.startDate.timeIntervalSince1970) * 1000),
                                                 "date_to": Int((result.startDate.timeIntervalSince1970) * 1000),
@@ -316,7 +317,8 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                                           }
                                          else{
                                              dataList.append(
-                                             [
+                                             [  
+                                                "uuid": "\(result.sumQuantity()?.doubleValue(for: unitType) ?? 0)-\(Int((result.startDate.timeIntervalSince1970) * 1000))",
                                                 "value": result.sumQuantity()?.doubleValue(for: unitType) ?? 0,
                                                 "date_from": Int((result.startDate.timeIntervalSince1970) * 1000),
                                                 "date_to": Int((result.startDate.timeIntervalSince1970) * 1000),
