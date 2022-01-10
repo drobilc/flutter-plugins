@@ -221,7 +221,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         
         let dataType = dataTypeLookUp(key: dataTypeKey)
         let predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: .strictStartDate)
-        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
 
         if(!catagoryTypes.contains(dataTypeKey)){
 
@@ -364,8 +364,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
       let compound = NSCompoundPredicate(andPredicateWithSubpredicates:
         [ sourcePredicate, timePredicate])
     
-      let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,
-                                          ascending: true)
+      let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
     
     let query = HKSampleQuery(
       sampleType: .workoutType(),
